@@ -268,6 +268,235 @@ export const buyerPortalData = {
   ],
 };
 
+// ═══════════════════════════════════════════════════════
+// FLOW SCREENS — Land, Opportunity, BOQ Entry, WBS, etc.
+// ═══════════════════════════════════════════════════════
+
+export const landLeads = [
+  { id: "LL-2026-001", location: "Nasirabad R/A, Chattogram", mouza: "Nasirabad", area: 42, areaUnit: "Katha", estimatedPrice: 180_000_000, pricePerKatha: 4_285_714, source: "BROKER", status: "CONVERTED", assignedTo: "Kamal Uddin", daysInPipeline: 45 },
+  { id: "LL-2026-002", location: "Agrabad C/A, Chattogram", mouza: "Agrabad", area: 28, areaUnit: "Katha", estimatedPrice: 252_000_000, pricePerKatha: 9_000_000, source: "DIRECT_OWNER", status: "QUALIFIED", assignedTo: "Kamal Uddin", daysInPipeline: 12 },
+  { id: "LL-2026-003", location: "Hathazari, Chattogram", mouza: "Hathazari", area: 85, areaUnit: "Katha", estimatedPrice: 127_500_000, pricePerKatha: 1_500_000, source: "REFERRAL", status: "SITE_VISITED", assignedTo: "Rafiq Ahmed", daysInPipeline: 8 },
+  { id: "LL-2026-004", location: "Khulshi, Chattogram", mouza: "Khulshi", area: 18, areaUnit: "Katha", estimatedPrice: 144_000_000, pricePerKatha: 8_000_000, source: "BROKER", status: "NEW", assignedTo: "Nasir Uddin", daysInPipeline: 2 },
+  { id: "LL-2026-005", location: "Bayazid, Chattogram", mouza: "Bayazid", area: 32, areaUnit: "Katha", estimatedPrice: 96_000_000, pricePerKatha: 3_000_000, source: "AUCTION", status: "REJECTED", assignedTo: "Kamal Uddin", daysInPipeline: 30 },
+  { id: "LL-2026-006", location: "Panchlaish, Chattogram", mouza: "Panchlaish", area: 22, areaUnit: "Katha", estimatedPrice: 176_000_000, pricePerKatha: 8_000_000, source: "DIRECT_OWNER", status: "QUALIFIED", assignedTo: "Rafiq Ahmed", daysInPipeline: 15 },
+];
+
+export const landLeadDetail = {
+  id: "LL-2026-001",
+  location: "Nasirabad R/A, Block-G, Chattogram",
+  district: "Chattogram",
+  thana: "Double Mooring",
+  mouza: "Nasirabad",
+  area: 42,
+  areaUnit: "Katha",
+  khatianNo: "RS-1245",
+  dagNo: "789/A",
+  estimatedPrice: 180_000_000,
+  source: "BROKER",
+  sourceName: "M/S Land Associates",
+  status: "CONVERTED",
+  parcels: [
+    { code: "P-001", rsKhatian: "1245", saDag: "789/A", landType: "RESIDENTIAL", ownershipType: "SOLE", owner: "Mr. Abdul Karim", sharePercent: 60 },
+    { code: "P-002", rsKhatian: "1246", saDag: "790/B", landType: "RESIDENTIAL", ownershipType: "JOINT", owner: "Mrs. Fatema Begum", sharePercent: 40 },
+  ],
+  documents: [
+    { type: "DEED", title: "Original Sale Deed", verified: true },
+    { type: "KHATIAN", title: "RS Khatian Certificate", verified: true },
+    { type: "DAG_MAP", title: "SA Dag Map", verified: true },
+    { type: "MUTATION", title: "Mutation Certificate", verified: false },
+    { type: "TAX_RECEIPT", title: "Land Tax Receipt (2025)", verified: true },
+    { type: "ENCUMBRANCE_CERT", title: "Non-Encumbrance Certificate", verified: true },
+    { type: "SOIL_TEST", title: "Soil Investigation Report", verified: true },
+    { type: "LEGAL_OPINION", title: "Legal Opinion — Title Search", verified: false },
+  ],
+  siteVisits: [
+    { date: "2026-03-05", visitedBy: "Eng. Kamal", purpose: "Initial Site Assessment", recommendation: "PROCEED", findings: "Flat land, good road access (60ft), utilities available. Adjacent to school and market." },
+    { date: "2026-03-12", visitedBy: "Eng. Rafiq", purpose: "Soil Test Supervision", recommendation: "PROCEED", findings: "Bearing capacity adequate. Water table at 12ft. No flood history." },
+  ],
+  dueDiligence: {
+    status: "PASSED",
+    checks: [
+      { category: "LEGAL", item: "Title verification — 30-year chain", status: "PASSED" },
+      { category: "LEGAL", item: "Encumbrance check", status: "PASSED" },
+      { category: "LEGAL", item: "Mutation to current owner", status: "PENDING" },
+      { category: "SURVEY", item: "Physical boundary verification", status: "PASSED" },
+      { category: "SURVEY", item: "Soil investigation", status: "PASSED" },
+      { category: "REGULATORY", item: "CDA building permission feasibility", status: "PASSED" },
+      { category: "REGULATORY", item: "FAR & coverage allowance", status: "PASSED" },
+      { category: "FINANCIAL", item: "Market price validation", status: "PASSED" },
+      { category: "PHYSICAL", item: "Road access & utility availability", status: "PASSED" },
+    ],
+  },
+};
+
+export const opportunity = {
+  code: "OPP-00041",
+  title: "Nasirabad Residential Development",
+  landLeadId: "LL-2026-001",
+  status: "CONVERTED",
+  estimatedLandCost: 180_000_000,
+  estimatedProjectCost: 700_000_000,
+  estimatedRevenue: 950_000_000,
+  responsibilityCenter: "Business Development",
+  costCenter: "Pre-Development",
+  expenses: [
+    { date: "2026-03-05", type: "SURVEY", description: "Initial site survey & measurement", amount: 35_000, status: "POSTED" },
+    { date: "2026-03-08", type: "LEGAL", description: "Title search — 30 year chain", amount: 80_000, status: "POSTED" },
+    { date: "2026-03-12", type: "SURVEY", description: "Soil investigation — 3 boreholes", amount: 120_000, status: "POSTED" },
+    { date: "2026-03-15", type: "AUTHORITY_FEE", description: "CDA information & FAR query", amount: 25_000, status: "POSTED" },
+    { date: "2026-03-20", type: "CONSULTANCY", description: "Architectural concept sketch", amount: 75_000, status: "POSTED" },
+    { date: "2026-03-22", type: "TRAVEL", description: "Management site visit (3 persons)", amount: 15_000, status: "POSTED" },
+  ],
+  totalExpenses: 350_000,
+};
+
+export const wbsTree = [
+  {
+    code: "RE-00027", name: "ABC Nasirabad Heights", level: 1, children: [
+      {
+        code: "TWR-A", name: "Tower A", level: 2, children: [
+          {
+            code: "FND", name: "Foundation", level: 3, children: [
+              { code: "FND-EARTH", name: "Earthwork", level: 4, boqItems: 3 },
+              { code: "FND-PILE", name: "Pile Work", level: 4, boqItems: 2 },
+              { code: "FND-RCC", name: "RCC Foundation", level: 4, boqItems: 4 },
+            ]
+          },
+          {
+            code: "STR", name: "Structure", level: 3, children: [
+              { code: "STR-RCC", name: "RCC Work", level: 4, boqItems: 5 },
+              { code: "STR-BRICK", name: "Brickwork", level: 4, boqItems: 3 },
+              { code: "STR-REBAR", name: "Reinforcement", level: 4, boqItems: 2 },
+            ]
+          },
+          {
+            code: "MEP", name: "MEP", level: 3, children: [
+              { code: "MEP-ELECT", name: "Electrical", level: 4, boqItems: 4 },
+              { code: "MEP-PLUMB", name: "Plumbing", level: 4, boqItems: 3 },
+              { code: "MEP-FIRE", name: "Fire Fighting", level: 4, boqItems: 2 },
+            ]
+          },
+          {
+            code: "FIN", name: "Finishing", level: 3, children: [
+              { code: "FIN-PLSTR", name: "Plastering", level: 4, boqItems: 2 },
+              { code: "FIN-TILE", name: "Tiling", level: 4, boqItems: 3 },
+              { code: "FIN-PAINT", name: "Painting", level: 4, boqItems: 2 },
+            ]
+          },
+        ]
+      },
+      { code: "EXT", name: "External Works", level: 2, children: [
+        { code: "EXT-LAND", name: "Landscaping", level: 3, children: [] },
+        { code: "EXT-ROAD", name: "Internal Roads", level: 3, children: [] },
+      ]},
+    ]
+  },
+];
+
+export const boqNewLine = {
+  wbs: "Tower A > Structure > RCC Column",
+  costCode: "STR-RCC",
+  item: "RCC Column Work (1:1.5:3)",
+  measurement: {
+    formula: "L × W × H × Nos",
+    lines: [
+      { description: "Ground Floor columns", nos: 12, length: 1.0, breadth: 1.5, height: 10, qty: 180 },
+      { description: "1st Floor columns", nos: 12, length: 1.0, breadth: 1.5, height: 10, qty: 180 },
+      { description: "2nd Floor columns", nos: 12, length: 1.0, breadth: 1.25, height: 10, qty: 150 },
+      { description: "3rd-6th Floor columns", nos: 48, length: 0.83, breadth: 1.25, height: 10, qty: 498 },
+    ],
+    totalQty: 1008,
+    uom: "CFT",
+  },
+  rateAnalysis: {
+    materials: [
+      { item: "Cement (OPC 53 Grade)", coefficient: 0.22, unit: "Bag", rate: 520, amount: 114.40 },
+      { item: "Sand (Sylhet)", coefficient: 0.015, unit: "CFT", rate: 85, amount: 1.28 },
+      { item: "Stone Aggregate (3/4\")", coefficient: 0.030, unit: "CFT", rate: 180, amount: 5.40 },
+      { item: "60 Grade Rod", coefficient: 4.2, unit: "KG", rate: 84, amount: 352.80 },
+      { item: "Binding Wire", coefficient: 0.05, unit: "KG", rate: 120, amount: 6.00 },
+    ],
+    labour: [
+      { item: "Mason", coefficient: 0.08, unit: "Day", rate: 800, amount: 64.00 },
+      { item: "Helper", coefficient: 0.12, unit: "Day", rate: 500, amount: 60.00 },
+    ],
+    equipment: [
+      { item: "Vibrator", coefficient: 0.02, unit: "Day", rate: 600, amount: 12.00 },
+    ],
+    materialTotal: 479.88,
+    labourTotal: 124.00,
+    equipmentTotal: 12.00,
+    overhead: 18.47,
+    overheadPercent: 3,
+    totalRate: 634,
+  },
+};
+
+export const tenderData = {
+  code: "TND-RE27-001",
+  title: "Civil Works — Tower A Structure",
+  project: "ABC Nasirabad Heights",
+  estimatedValue: 145_000_000,
+  status: "EVALUATION",
+  openDate: "2026-04-01",
+  closeDate: "2026-04-20",
+  bids: [
+    { contractor: "M/S Reliable Construction", bidAmount: 142_500_000, technicalScore: 85, priceScore: 92, weightedTotal: 89.2, rank: 1 },
+    { contractor: "M/S Delta Builders", bidAmount: 148_200_000, technicalScore: 82, priceScore: 86, weightedTotal: 84.4, rank: 2 },
+    { contractor: "M/S Star Engineering", bidAmount: 138_900_000, technicalScore: 72, priceScore: 95, weightedTotal: 85.8, rank: 3 },
+    { contractor: "M/S Prime Contractors", bidAmount: 155_000_000, technicalScore: 90, priceScore: 78, weightedTotal: 83.2, rank: 4 },
+  ],
+  lineComparison: [
+    { item: "RCC Column Work", uom: "CFT", estimatedRate: 625, bids: [648, 670, 610, 695] },
+    { item: "RCC Beam Work", uom: "CFT", estimatedRate: 610, bids: [635, 650, 598, 680] },
+    { item: "RCC Slab Work", uom: "SFT", estimatedRate: 450, bids: [468, 475, 440, 490] },
+    { item: "Brickwork (5\")", uom: "SFT", estimatedRate: 85, bids: [88, 92, 82, 95] },
+  ],
+};
+
+export const materialRequisitions = [
+  { code: "MR-RE27-001", date: "2026-08-10", requestedBy: "Eng. Masud Rana", wbs: "Tower A > Structure > L8", priority: "URGENT", status: "APPROVED", items: 4, totalValue: 850_000 },
+  { code: "MR-RE27-002", date: "2026-08-11", requestedBy: "Eng. Masud Rana", wbs: "Tower A > MEP > L5-6", priority: "NORMAL", status: "SUBMITTED", items: 6, totalValue: 320_000 },
+  { code: "MR-RE27-003", date: "2026-08-12", requestedBy: "Eng. Masud Rana", wbs: "Tower A > Finishing > L1-2", priority: "NORMAL", status: "DRAFT", items: 3, totalValue: 180_000 },
+];
+
+export const mrDetail = {
+  code: "MR-RE27-001",
+  date: "2026-08-10",
+  project: "ABC Nasirabad Heights",
+  wbs: "Tower A > Structure > Level 8",
+  requestedBy: "Eng. Masud Rana",
+  requiredDate: "2026-08-13",
+  priority: "URGENT",
+  status: "APPROVED",
+  approvedBy: "PM Kamal Hossain",
+  lines: [
+    { item: "60 Grade Rod (12mm)", boqLine: "STR-RCC", requested: 2500, uom: "KG", approved: 2500, issued: 2500, stockAvailable: 3200 },
+    { item: "Cement OPC 53 Grade", boqLine: "STR-RCC", requested: 200, uom: "Bag", approved: 200, issued: 150, stockAvailable: 180 },
+    { item: "Sand (Sylhet)", boqLine: "STR-RCC", requested: 100, uom: "CFT", approved: 100, issued: 0, stockAvailable: 250 },
+    { item: "Stone Aggregate (3/4\")", boqLine: "STR-RCC", requested: 150, uom: "CFT", approved: 150, issued: 0, stockAvailable: 300 },
+  ],
+};
+
+export const handoverData = {
+  project: "Bay View Residence",
+  totalUnits: 36,
+  handedOver: 24,
+  pending: 8,
+  inspection: 4,
+  units: [
+    { code: "B-101", buyer: "Mr. Alam", inspectionStatus: "PASSED", clearances: { construction: true, snags: true, accounts: true, agreement: true, documents: true, registration: false }, handoverDate: null, status: "PENDING_REGISTRATION" },
+    { code: "B-102", buyer: "Mrs. Khatun", inspectionStatus: "PASSED", clearances: { construction: true, snags: true, accounts: true, agreement: true, documents: true, registration: true }, handoverDate: "2026-07-15", status: "HANDED_OVER" },
+    { code: "B-201", buyer: "Mr. Siddique", inspectionStatus: "CONDITIONAL", clearances: { construction: true, snags: false, accounts: true, agreement: true, documents: false, registration: false }, handoverDate: null, status: "SNAGS_PENDING" },
+    { code: "B-202", buyer: "Mr. Hossain", inspectionStatus: "NOT_DONE", clearances: { construction: false, snags: false, accounts: false, agreement: true, documents: false, registration: false }, handoverDate: null, status: "CONSTRUCTION_PENDING" },
+  ],
+  snags: [
+    { unit: "B-201", category: "PLUMBING", description: "Kitchen sink drain leaking", severity: "MAJOR", contractor: "M/S Delta Plumbing", status: "ASSIGNED" },
+    { unit: "B-201", category: "PAINTING", description: "Bedroom 2 wall paint uneven", severity: "MINOR", contractor: "M/S Color Works", status: "IN_PROGRESS" },
+    { unit: "B-201", category: "ELECTRICAL", description: "Living room switch plate loose", severity: "COSMETIC", contractor: "M/S Power Electric", status: "OPEN" },
+  ],
+};
+
 // Helper
 export function formatBDT(amount: number): string {
   if (amount >= 10_000_000) return `${(amount / 10_000_000).toFixed(1)} Cr`;

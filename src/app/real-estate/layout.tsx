@@ -13,6 +13,7 @@ const navSections = [
     title: "Overview",
     items: [
       { href: "/real-estate", label: "Dashboard", icon: LayoutDashboard },
+      { href: "/real-estate/dashboards/ceo", label: "CEO Dashboard", icon: BarChart3 },
       { href: "/real-estate/projects", label: "Projects", icon: Building2 },
     ],
   },

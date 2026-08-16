@@ -1,117 +1,29 @@
 "use client";
 
-import Link from "next/link";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard, Building2, ClipboardList, Calculator,
-  FileText, Home, TrendingUp, BarChart3, UserCircle,
-  MapPin, FolderTree, Hammer, Package, CheckSquare, Database
-} from "lucide-react";
-
-const navSections = [
-  {
-    title: "Overview",
-    items: [
-      { href: "/real-estate", label: "Dashboard", icon: LayoutDashboard },
-      { href: "/real-estate/dashboards/ceo", label: "CEO Dashboard", icon: BarChart3 },
-      { href: "/real-estate/projects", label: "Projects", icon: Building2 },
-    ],
-  },
-  {
-    title: "Pre-Project",
-    items: [
-      { href: "/real-estate/land-leads", label: "Land Leads", icon: MapPin },
-      { href: "/real-estate/opportunity", label: "Opportunities", icon: TrendingUp },
-      { href: "/real-estate/feasibility", label: "Feasibility", icon: BarChart3 },
-    ],
-  },
-  {
-    title: "Planning & BOQ",
-    items: [
-      { href: "/real-estate/wbs", label: "WBS Builder", icon: FolderTree },
-      { href: "/real-estate/boq", label: "BOQ & Estimation", icon: Calculator },
-      { href: "/real-estate/masters/cost-codes", label: "Cost Codes", icon: Database },
-      { href: "/real-estate/masters/boq-items", label: "BOQ Item Master", icon: Database },
-      { href: "/real-estate/masters/rate-templates", label: "Rate Templates", icon: Database },
-    ],
-  },
-  {
-    title: "Execution",
-    items: [
-      { href: "/real-estate/dsr", label: "Daily Site Report", icon: ClipboardList },
-      { href: "/real-estate/tender", label: "Tenders & CS", icon: FileText },
-      { href: "/real-estate/running-bill", label: "Running Bill", icon: FileText },
-      { href: "/real-estate/material-requisition", label: "Material Requisition", icon: Package },
-    ],
-  },
-  {
-    title: "Revenue",
-    items: [
-      { href: "/real-estate/booking", label: "Unit Booking", icon: Home },
-      { href: "/real-estate/budget", label: "Budget vs Actual", icon: BarChart3 },
-    ],
-  },
-  {
-    title: "Close & Portal",
-    items: [
-      { href: "/real-estate/handover", label: "Handover", icon: CheckSquare },
-      { href: "/real-estate/buyer-portal", label: "Buyer Portal", icon: UserCircle },
-    ],
-  },
-];
+import { TopBar } from "@/components/real-estate/top-bar";
+import { Sidebar } from "@/components/real-estate/sidebar";
+import { detectModuleFromPath, type ModuleId } from "@/lib/navigation";
 
 export default function RealEstateLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const [activeModule, setActiveModule] = useState<ModuleId>(() =>
+    detectModuleFromPath(pathname)
+  );
+
+  // Sync active module when user navigates via links (not tab clicks)
+  useEffect(() => {
+    const detected = detectModuleFromPath(pathname);
+    setActiveModule(detected);
+  }, [pathname]);
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col fixed h-full">
-        <div className="p-5 border-b border-slate-700">
-          <h1 className="text-lg font-bold">AbcERP</h1>
-          <p className="text-xs text-slate-400 mt-0.5">Real Estate Development</p>
-          <span className="inline-block mt-2 text-[10px] bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-full font-medium">
-            PROTOTYPE
-          </span>
-        </div>
-        <nav className="flex-1 py-2 overflow-y-auto">
-          {navSections.map((section) => (
-            <div key={section.title} className="mb-1">
-              <p className="px-5 py-1.5 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
-                {section.title}
-              </p>
-              {section.items.map((item) => {
-                const isActive = pathname === item.href ||
-                  (item.href !== "/real-estate" && pathname.startsWith(item.href));
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center gap-3 px-5 py-2 text-sm transition-colors ${
-                      isActive
-                        ? "bg-blue-600 text-white font-medium"
-                        : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                    }`}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-          ))}
-        </nav>
-        <div className="p-4 border-t border-slate-700 text-xs text-slate-500">
-          <p>ABC Properties Ltd.</p>
-          <p className="mt-0.5">Prototype v0.1 — Static Data</p>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 ml-64 bg-gray-50 min-h-screen">
-        <div className="p-6">
-          {children}
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      <TopBar activeModule={activeModule} onModuleChange={setActiveModule} />
+      <Sidebar activeModule={activeModule} onModuleChange={setActiveModule} />
+      <main className="ml-56 pt-14 min-h-screen">
+        <div className="p-6">{children}</div>
       </main>
     </div>
   );

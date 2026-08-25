@@ -95,6 +95,13 @@ This directory is the **design authority** for the AbcERP Real Estate prototype.
 | `21-capacity-and-user-stories.md` | **Complete system capacity** — 256 user stories across 19 roles, organized by module. Every story mapped to spec doc + prototype screen + status (Built/Designed/Planned). Coverage analysis by role. | Product demos, investor pitches, developer onboarding, feature prioritization, QA planning |
 | `22-market-gap-analysis.md` | **Market gap analysis** — 52 new user stories from analyzing target companies across BD (Shanta, Concord, Bashundhara), UAE (Emaar, ALDAR, DAMAC), KSA (Roshn, Dar Al Arkan), Africa (Rendeavour, Centum). Sales CRM, construction loans, regulatory compliance, mobile access, multi-currency, Islamic finance. | Feature prioritization, market entry planning, investor pitch |
 
+### P0 Gap Specifications
+
+| File | What It Is | When to Read |
+|---|---|---|
+| `23-sales-crm-spec.md` | **Sales CRM & Pre-Booking Pipeline** — lead capture, follow-up tracking, site visits, quotation generation, reservation, broker/agent commission management, sales funnel analytics. 12 screens, entity models, GL entries, config dependencies. | Before building any sales CRM screens |
+| `24-construction-loans-collections.md` | **Construction Loans & Collections** — loan draw-down, IAS 23 interest capitalization, repayment from sales. Demand letters, payment reminders, penalty interest, FIFO partial payment allocation. Entity models, GL entries, collections dashboard. | Before building finance or collections screens |
+
 ---
 
 ## How Prototype Docs Relate to Code Reference

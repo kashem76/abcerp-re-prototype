@@ -1,7 +1,7 @@
 # Cost Allocation & Profitability — Complete Specification
 
 **Module:** Overhead Allocation, Unit Cost Allocation, Project/Unit Profitability, Feasibility vs Actual
-**Code Reference:** `17-cost-allocation-profitability.md`
+**Code Reference:** `90-cost-allocation-profitability.md`
 **Prototype Screens:** Budget vs Actual, Feasibility vs Actual, Unit Profitability, Overhead Allocation, Profit Erosion
 
 ---

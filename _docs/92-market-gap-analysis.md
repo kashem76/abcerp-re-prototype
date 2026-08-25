@@ -79,7 +79,7 @@ Our config is country-neutral (good), but we haven't documented the specific reg
 | G12 | As a PM, I want to **track fire safety NOC** from Fire Service, **environmental clearance** from DoE, and **utility NOCs** with expiry dates, so that all approvals are current. | Bangladesh | FSCD, DoE, WASA, DESCO |
 | G13 | As Finance, I want to **manage stamp duty and registration** calculations that vary by district and property value, so that land registration costs are accurate. | Bangladesh | Sub-Registrar Office |
 
-**Assessment:** Our config architecture (Doc 08) supports country packs, and the evaluation engine (Doc 07) makes criteria configurable. But the specific **regulatory tracking workflows** (permit applications, escrow account management, tax certificate generation) are NOT user stories — they need to be added.
+**Assessment:** Our config architecture (Doc 02) supports country packs, and the evaluation engine (Doc 12) makes criteria configurable. But the specific **regulatory tracking workflows** (permit applications, escrow account management, tax certificate generation) are NOT user stories — they need to be added.
 
 ---
 
@@ -291,7 +291,7 @@ This isn't a nice-to-have. It's where **revenue originates**. Every developer we
 
 ---
 
-_This analysis ensures AbcERP doesn't just work for one Dhaka developer — it works for any real estate construction company from Dhaka to Dubai to Riyadh to Nairobi. The config-driven architecture (Doc 08) makes this possible. The user stories (Doc 21) now need to grow from 256 to 297 to cover the gaps found here._
+_This analysis ensures AbcERP doesn't just work for one Dhaka developer — it works for any real estate construction company from Dhaka to Dubai to Riyadh to Nairobi. The config-driven architecture (Doc 02) makes this possible. The user stories (Doc 91) now need to grow from 256 to 297 to cover the gaps found here._
 
 Sources:
 - [Focus Softnet - Real Estate Construction ERP](https://www.focussoftnet.com/realestate-construction-erp-software)

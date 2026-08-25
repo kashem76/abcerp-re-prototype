@@ -1,8 +1,8 @@
 # Sales CRM & Pre-Booking Pipeline — Complete Specification
 
 **Module:** Lead Capture, Follow-up, Site Visit, Quotation, Reservation, Broker Management, Sales Funnel
-**Gap Reference:** Doc 22, Gap Group C (G14-G21)
-**Connects To:** Doc 14 (Sales, Booking & Collections) — CRM feeds into the existing booking workflow
+**Gap Reference:** Doc 92, Gap Group C (G14-G21)
+**Connects To:** Doc 40 (Sales, Booking & Collections) — CRM feeds into the existing booking workflow
 **Priority:** P0 — biggest blind spot. Every developer has a sales team working leads before booking.
 
 ---
@@ -102,7 +102,7 @@ LOST              Didn't convert (reason captured for analysis)
 | SITE_VISIT → QUOTATION | Quotation generated | PDF quote created, validity timer starts |
 | QUOTATION → NEGOTIATION | Customer requests discount/change | Modified quote created |
 | NEGOTIATION → RESERVATION | Customer wants to hold unit | Unit status: AVAILABLE → RESERVED. Timer starts. Config: reservationExpiryHours |
-| RESERVATION → BOOKING | Reservation converted | Links to existing booking wizard (Doc 14) |
+| RESERVATION → BOOKING | Reservation converted | Links to existing booking wizard (Doc 40) |
 | Any → LOST | Lead didn't convert | Lost reason captured. Unit released if reserved. |
 
 ---
@@ -348,11 +348,11 @@ Average Days: Lead → Booking = 18 days
 ```
 SALES CRM (this spec)
     │
-    ├──► Booking Wizard (Doc 14)
+    ├──► Booking Wizard (Doc 40)
     │     Lead converts → booking wizard pre-filled with lead data
     │     Quotation price carries forward (no re-entry)
     │
-    ├──► Property Unit Inventory (Doc 14)
+    ├──► Property Unit Inventory (Doc 40)
     │     Reservation changes unit status: AVAILABLE → RESERVED
     │     Booking changes: RESERVED → BOOKED
     │     CRM reads unit availability for quotation
@@ -361,7 +361,7 @@ SALES CRM (this spec)
     │     Broker commission posts to AP
     │     Reservation fee posts as liability
     │
-    ├──► Reporting (Doc 18)
+    ├──► Reporting (Doc 60)
     │     Funnel data feeds Sales Dashboard
     │     Lead source feeds Marketing ROI reports
     │

@@ -1,7 +1,7 @@
 # Land Module — Complete Specification
 
 **Module:** Pre-Project Lifecycle — Land Pipeline through Project Conversion
-**Prototype Authority:** This document + `05-land-evaluation-complete-design.md`
+**Prototype Authority:** This document + `10-land-evaluation-design.md`
 **Code Reference:** `abcERPCode/07-abcerp-code-reference/13-real-estate-development/15-land-acquisition-jv.md`
 
 ---
@@ -338,7 +338,7 @@ If not transferred, costs remain as corporate expense
 
 ## 7. Configuration (Settings Engine)
 
-The Land module is powered by a configurable Settings engine. See `05-land-evaluation-complete-design.md` Section 4 for full Settings screen specifications.
+The Land module is powered by a configurable Settings engine. See `10-land-evaluation-design.md` Section 4 for full Settings screen specifications.
 
 ### 7.1 What's Configurable
 

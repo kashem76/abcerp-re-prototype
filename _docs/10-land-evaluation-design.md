@@ -2,7 +2,7 @@
 
 **Purpose:** Single reference for the Land module — from pipeline through management decision to project conversion. Covers Settings (configuration engine), Operational screens (daily work), User roles, Report mapping, and Build plan.
 
-**Supersedes:** This document refines and replaces the Land-related sections of `02-land-workspace-design.md` and `03-evaluation-framework-design.md`. Those remain for historical context but this document is the implementation authority.
+**Supersedes:** This document refines and replaces the Land-related sections of `13-land-workspace-detail.md` and `14-evaluation-framework-detail.md`. Those remain for historical context but this document is the implementation authority.
 
 **Key Design Date:** August 2026
 

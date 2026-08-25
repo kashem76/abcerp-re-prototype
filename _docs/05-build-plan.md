@@ -129,7 +129,7 @@ R8: Sales CRM           R9: Loans &             R10: Scheduling          R16: Re
 
 **Why First:** Biggest blind spot. Every developer has a sales team working leads before booking. Currently we jump from "unit available" to "booking wizard" with no journey in between.
 
-**Spec:** `23-sales-crm-spec.md`
+**Spec:** `70-sales-crm-spec.md`
 
 ### Screens to Build
 
@@ -179,7 +179,7 @@ R8: Sales CRM           R9: Loans &             R10: Scheduling          R16: Re
 
 **Why:** 95% of developers use bank financing. Without loan tracking, project cost is understated. Without systematic collections, cash flow bleeds.
 
-**Spec:** `24-construction-loans-collections.md`
+**Spec:** `71-construction-loans-collections.md`
 
 ### Screens to Build
 
@@ -228,7 +228,7 @@ R8: Sales CRM           R9: Loans &             R10: Scheduling          R16: Re
 
 **Why:** Planning Engineer's entire job. Without it: no baseline to measure delay, no critical path to protect, no SPI computation, no look-ahead for resource planning.
 
-**Spec:** `20-construction-management-gaps.md` Section 1
+**Spec:** `80-construction-management-gaps.md` Section 1
 
 ### Screens to Build
 
@@ -267,7 +267,7 @@ R8: Sales CRM           R9: Loans &             R10: Scheduling          R16: Re
 
 **What:** Systematic quality inspections with checklists, NCR process, concrete testing log.
 
-**Spec:** `20-construction-management-gaps.md` Section 3
+**Spec:** `80-construction-management-gaps.md` Section 3
 
 ### Screens to Build
 
@@ -285,7 +285,7 @@ R8: Sales CRM           R9: Loans &             R10: Scheduling          R16: Re
 
 ## R12 — Safety Management (P2)
 
-**Spec:** `20-construction-management-gaps.md` Section 4
+**Spec:** `80-construction-management-gaps.md` Section 4
 
 ### Screens to Build
 

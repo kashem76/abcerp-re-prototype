@@ -628,7 +628,7 @@ Recommended next step:
 
 ## 5. Feasibility
 
-Accessible from the Feasibility tab in the workspace. Feasibility is a **collaborative workspace** — multiple departments contribute assessments that build into a management report. Powered by the configurable Evaluation Framework Engine (see `03-evaluation-framework-design.md`).
+Accessible from the Feasibility tab in the workspace. Feasibility is a **collaborative workspace** — multiple departments contribute assessments that build into a management report. Powered by the configurable Evaluation Framework Engine (see `14-evaluation-framework-detail.md`).
 
 Two navigation levels:
 
@@ -872,7 +872,7 @@ Risk Assessment          —               ○ Unassigned     Not Started     0%
 Financial Feasibility    Finance         ○ Unassigned     ⏳ Waiting      0%         —
 ```
 
-#### Full Collaboration System → `03-evaluation-framework-design.md`
+#### Full Collaboration System → `14-evaluation-framework-detail.md`
 
 The task board shown above is the entry point. The complete collaboration workflow is documented in Doc 03:
 
@@ -958,7 +958,7 @@ Margin                26.4% → 23.6%
 IRR                   24.8% → 22.4%
 ```
 
-See `03-evaluation-framework-design.md` section 12 for the full Cost Estimation Template system.
+See `14-evaluation-framework-detail.md` section 12 for the full Cost Estimation Template system.
 
 #### Scenarios Sub-tab
 

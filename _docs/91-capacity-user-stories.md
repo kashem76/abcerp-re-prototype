@@ -126,18 +126,18 @@
 
 | # | User Story | Status | Screen |
 |---|---|---|---|
-| P01 | As a PM, I want to **create a project from an approved land** with most information auto-carried forward, so that I don't re-enter feasibility data. | Designed | Doc 09, Section 3.1 |
+| P01 | As a PM, I want to **create a project from an approved land** with most information auto-carried forward, so that I don't re-enter feasibility data. | Designed | Doc 20, Section 3.1 |
 | P02 | As a PM, I want to **define project phases** (Foundation, Structure, MEP, Finishing, External, Handover) with budget and dates, so that cost tracking has structure. | Built | `projects/[id]` |
 | P03 | As a PM, I want to **define the building structure** (tower → floor → unit), so that the unit inventory exists for sales. | Built | `projects/[id]` |
 | P04 | As a PM, I want to **build a WBS** (Project → Tower → Trade → Activity) as a drag-reorderable tree, so that BOQ items have a work structure to attach to. | Built | `wbs` |
 | P05 | As a PM, I want to **see project health** (construction %, budget used, units sold, collection rate) on one overview screen, so that I know the project's status instantly. | Built | `projects/[id]` |
 | P06 | As a PM, I want to **see what needs attention** — BOQ overruns, pending bills, overdue collections — with action buttons, so that I can resolve issues. | Built | `projects/[id]` |
 | P07 | As a PM, I want to **see which lifecycle stage the project is in** and what gate conditions must be met to advance, so that I work towards clear milestones. | Built | `settings/lifecycle` |
-| P08 | As a Director, I want **stage transitions to enforce gate conditions** (budget approved, BOQ locked, all units created), so that we don't skip critical steps. | Designed | Doc 09, Section 4 |
+| P08 | As a Director, I want **stage transitions to enforce gate conditions** (budget approved, BOQ locked, all units created), so that we don't skip critical steps. | Designed | Doc 20, Section 4 |
 | P09 | As a CEO, I want to **see all projects on one portfolio dashboard** with health scores, budget status, and alerts, so that I have a complete picture. | Built | `/real-estate` |
-| P10 | As a PM, I want to **transfer pre-development costs** from P&L to Project WIP at conversion, so that the project carries its true cost from day one. | Designed | Doc 09, Section 3.1 |
-| P11 | As a PM, I want **JV entitlement rules** from the land agreement to carry forward to the project, so that landowner allocations are tracked. | Designed | Doc 09, Section 3.1 |
-| P12 | As a PM, I want **open approval conditions** from the management decision to remain visible on the project workspace, so that nothing falls through the cracks. | Designed | Doc 09, Section 3.1 |
+| P10 | As a PM, I want to **transfer pre-development costs** from P&L to Project WIP at conversion, so that the project carries its true cost from day one. | Designed | Doc 20, Section 3.1 |
+| P11 | As a PM, I want **JV entitlement rules** from the land agreement to carry forward to the project, so that landowner allocations are tracked. | Designed | Doc 20, Section 3.1 |
+| P12 | As a PM, I want **open approval conditions** from the management decision to remain visible on the project workspace, so that nothing falls through the cracks. | Designed | Doc 20, Section 3.1 |
 | P13 | As a PM, I want to **see feasibility baseline alongside actuals** as the project progresses, so that I can track accountability. | Built | `reports/feasibility-vs-actual` |
 | P14 | As a PM, I want to **navigate the project workspace** with tabs (Overview, Plan, BOQ, Buy, Build, Inventory, Sales, Finance), so that everything is in one place. | Built | `projects/[id]` (tabs) |
 | P15 | As an Admin, I want to **configure lifecycle stages and transitions**, so that the stage model matches our company's process. | Built | `settings/lifecycle` |
@@ -201,7 +201,7 @@
 | C15 | As a PM, I want to **calculate Liquidated Damages (LD)** when a contractor exceeds the contractual completion date minus approved EOT, so that delay penalties are enforced. | Planned | Doc 20, Section 6.1 |
 | C16 | As a PM, I want to **process Extension of Time (EOT) claims** with evidence, categorize delays (excusable vs non-excusable), and approve/reject with documented rationale. | Planned | Doc 20, Section 6.1 |
 | C17 | As a PM, I want to **track hindrances** (material shortage, design hold, authority delay) with responsible party and schedule impact, so that EOT claims have supporting evidence. | Planned | Doc 20, Section 6.1 |
-| C18 | As a PM, I want to **release retention** in two tranches — 50% at practical completion, 50% at DLP expiry — so that retention follows contractual terms. | Designed | Doc 16, Section 3 |
+| C18 | As a PM, I want to **release retention** in two tranches — 50% at practical completion, 50% at DLP expiry — so that retention follows contractual terms. | Designed | Doc 51, Section 3 |
 | C19 | As a PM, I want to **issue a completion certificate** when a contractor finishes their scope, so that the contract is formally closed. | Designed | Doc 12, Section 2 |
 | C20 | As Finance, I want to **see the contractor ledger** — every bill, payment, advance, and deduction — in one view, so that the contractor account is transparent. | Designed | Doc 12, Section 2 |
 | C21 | As Procurement, I want to **see the tender register** — all tenders with status, bids received, awards — so that procurement activity is visible. | Built | `tender` (list) |
@@ -235,12 +235,12 @@
 | S09 | As a Site Engineer, I want the system to **check BOQ remaining quantity** when I raise an MR, so that I don't over-request. | Built | `material-requisition/new` (BOQ status) |
 | S10 | As a Store Keeper, I want to **issue materials** from the site store with gate pass, so that every item leaving the store is documented. | Built | `material-issue/new` |
 | S11 | As a Store Keeper, I want the **material issue to post GL** (DR WIP / CR Inventory) automatically, so that financial records are current. | Built | `material-issue/new` (GL preview) |
-| S12 | As a Store Keeper, I want to **record material returns** to reverse the WIP posting, so that unused materials are properly accounted for. | Designed | Doc 13, Section 3.2 |
-| S13 | As a Store Keeper, I want to **record material wastage** that expenses immediately to P&L (never capitalized to WIP — ADR-010), so that losses are transparent. | Designed | Doc 13, Section 3.2 |
+| S12 | As a Store Keeper, I want to **record material returns** to reverse the WIP posting, so that unused materials are properly accounted for. | Designed | Doc 31, Section 3.2 |
+| S13 | As a Store Keeper, I want to **record material wastage** that expenses immediately to P&L (never capitalized to WIP — ADR-010), so that losses are transparent. | Designed | Doc 31, Section 3.2 |
 | S14 | As a PM, I want to **see BOQ consumption** — planned vs purchased vs consumed vs wasted — so that material usage is controlled. | Built | `reports/material-consumption` |
-| S15 | As a PM, I want **variance alerts when material consumption exceeds BOQ planned** by the configured threshold, so that waste is caught early. | Designed | Doc 13, Section 5 |
-| S16 | As a Store Keeper, I want to **see site stock levels** with reorder alerts, so that material shortages are prevented. | Designed | Doc 13, Section 3.2 |
-| S17 | As a PM, I want to **transfer materials between project sites**, so that excess inventory on one project can be used on another. | Designed | Doc 13, Section 4 |
+| S15 | As a PM, I want **variance alerts when material consumption exceeds BOQ planned** by the configured threshold, so that waste is caught early. | Designed | Doc 31, Section 5 |
+| S16 | As a Store Keeper, I want to **see site stock levels** with reorder alerts, so that material shortages are prevented. | Designed | Doc 31, Section 3.2 |
+| S17 | As a PM, I want to **transfer materials between project sites**, so that excess inventory on one project can be used on another. | Designed | Doc 31, Section 4 |
 
 ### Construction Scheduling (Not Yet Built — P1 Gap)
 
@@ -258,20 +258,20 @@
 | # | User Story | Status | Screen |
 |---|---|---|---|
 | S24 | As a QA Engineer, I want to **define inspection points** per WBS activity (hold points / witness points), so that quality checks are systematic. | Designed | Doc 20, Section 3 |
-| S25 | As a QA Engineer, I want to **execute inspections with checklists** (pass/fail per item, photos, inspector sign-off), so that results are structured. | Designed | Doc 13, Section 3.3 |
+| S25 | As a QA Engineer, I want to **execute inspections with checklists** (pass/fail per item, photos, inspector sign-off), so that results are structured. | Designed | Doc 31, Section 3.3 |
 | S26 | As a QA Engineer, I want **failed inspections to auto-create an NCR** (Non-Conformance Report) with root cause, corrective action, and rework cost, so that quality failures are formally tracked. | Planned | Doc 20, Section 3 |
-| S27 | As a QA Engineer, I want to **record concrete cube tests** (cube ID, pour location, grade, slump, 7-day/28-day strength, pass/fail), so that structural compliance is documented. | Designed | Doc 13, Section 3.3 |
+| S27 | As a QA Engineer, I want to **record concrete cube tests** (cube ID, pour location, grade, slump, 7-day/28-day strength, pass/fail), so that structural compliance is documented. | Designed | Doc 31, Section 3.3 |
 | S28 | As a PM, I want to **see a quality dashboard** (first-time-pass rate, NCR trend, rework cost %), so that quality performance is visible. | Planned | Doc 20, Section 3 |
 
 ### Safety Management (Designed, Not Built — P2)
 
 | # | User Story | Status | Screen |
 |---|---|---|---|
-| S29 | As a Safety Officer, I want to **report safety incidents** with type, severity, description, injured persons, action taken, so that incidents are documented. | Designed | Doc 13, Section 3.4 |
+| S29 | As a Safety Officer, I want to **report safety incidents** with type, severity, description, injured persons, action taken, so that incidents are documented. | Designed | Doc 31, Section 3.4 |
 | S30 | As a Safety Officer, I want to **issue Permits to Work** (hot work, confined space, excavation, height, crane, electrical) with precautions checklist, so that high-risk activities are authorized. | Planned | Doc 20, Section 4 |
 | S31 | As a Safety Officer, I want to **record daily toolbox talks** (topic, attendees, sign-off), so that safety briefings are documented. | Planned | Doc 20, Section 4 |
 | S32 | As a Safety Officer, I want to **track equipment certifications** (crane load test, scaffolding inspection) with expiry dates, so that unsafe equipment is not used. | Planned | Doc 20, Section 4 |
-| S33 | As a PM, I want to **see a safety dashboard** (incident-free days, trend, open corrective actions), so that safety performance is visible. | Designed | Doc 13, Section 3.4 |
+| S33 | As a PM, I want to **see a safety dashboard** (incident-free days, trend, open corrective actions), so that safety performance is visible. | Designed | Doc 31, Section 3.4 |
 
 ### Resource Management (Not Covered — P1 Gap for Costing)
 
@@ -302,8 +302,8 @@ Covered in Doc 20, Section 2. Stories would include drawing register, revision c
 | R05 | As Sales, I want **payment schedule auto-generated** from the selected plan (20/80, 30/70, milestone-based), so that installments are structured. | Built | `booking/new` (payment schedule) |
 | R06 | As Sales, I want to **process a booking cancellation** with forfeiture calculation and refund, releasing the unit back to available. | Built | `booking/cancellation` |
 | R07 | As Sales, I want to **transfer a unit** from one buyer to another with financial settlement, so that buyer changes are handled properly. | Built | `booking/transfer` |
-| R08 | As Finance, I want **installment demands raised as SalesInvoices** in AR, so that collections use the standard AR system. | Designed | Doc 14, Section 3 |
-| R09 | As Finance, I want **collections posted as CustomerReceipts** against demand invoices, reducing AR, so that receivables are tracked. | Designed | Doc 14, Section 3 |
+| R08 | As Finance, I want **installment demands raised as SalesInvoices** in AR, so that collections use the standard AR system. | Designed | Doc 40, Section 3 |
+| R09 | As Finance, I want **collections posted as CustomerReceipts** against demand invoices, reducing AR, so that receivables are tracked. | Designed | Doc 40, Section 3 |
 | R10 | As Sales Head, I want to **see AR aging** (current, 30, 60, 90, >90 days) by customer and unit, so that overdue accounts are visible. | Built | `reports/ar-aging` |
 | R11 | As Sales Head, I want to **see collection efficiency** (demanded vs collected by period), so that cash flow health is clear. | Built | `reports/collection` |
 | R12 | As Sales Head, I want to **see sales velocity** (units booked per month) and absorption rate, so that marketing effectiveness is measured. | Built | `dashboards/sales` |
@@ -328,12 +328,12 @@ Covered in Doc 20, Section 2. Stories would include drawing register, revision c
 | V02 | As a QS, I want to **assess the cost impact** of a change request (BOQ lines affected, additional cost, contingency impact), so that the financial consequence is clear. | Built | `variation/new` (Impact assessment) |
 | V03 | As a QS, I want to **assess the schedule impact** (days, critical path flag, mitigation plan), so that time consequences are documented. | Built | `variation/new` (Schedule impact) |
 | V04 | As a PM, I want **variation orders to go through tiered approval** (PM → Director → CFO → Board based on value), so that authority matches the financial magnitude. | Built | `variation/new` (Approval chain) |
-| V05 | As a PM, I want **approved VOs to create BOQ version deltas** (baseline untouched, new version with changes), so that budget history is preserved. | Designed | Doc 15, Section 3 |
+| V05 | As a PM, I want **approved VOs to create BOQ version deltas** (baseline untouched, new version with changes), so that budget history is preserved. | Designed | Doc 50, Section 3 |
 | V06 | As a PM, I want to **see the budget waterfall** (Baseline + Approved VOs = Current + Pending = Forecast), so that budget evolution is transparent. | Built | `variation/new` (Budget impact) |
-| V07 | As a PM, I want to **see contingency depletion** in real time as VOs are approved, with management alert when contingency approaches zero. | Designed | Doc 15, Section 3 |
+| V07 | As a PM, I want to **see contingency depletion** in real time as VOs are approved, with management alert when contingency approaches zero. | Designed | Doc 50, Section 3 |
 | V08 | As a PM, I want a **variation register** — all CRs and VOs for a project, filterable by status and type — so that change history is visible. | Built | `variation/new` (VO list) |
-| V09 | As Finance, I want **VO-triggered budget adjustments** to be the only way the budget changes after BOQ lock, so that budget integrity is maintained. | Designed | Doc 15, Section 4 |
-| V10 | As a Contractor, I want to **receive notification** when a VO affects my contract scope, so that I can adjust my work plan. | Planned | Doc 15, Section 3 |
+| V09 | As Finance, I want **VO-triggered budget adjustments** to be the only way the budget changes after BOQ lock, so that budget integrity is maintained. | Designed | Doc 50, Section 4 |
+| V10 | As a Contractor, I want to **receive notification** when a VO affects my contract scope, so that I can adjust my work plan. | Planned | Doc 50, Section 3 |
 
 ---
 
@@ -348,11 +348,11 @@ Covered in Doc 20, Section 2. Stories would include drawing register, revision c
 | H03 | As a QA Engineer, I want to **create snags** with category, severity, photo, description, and assigned contractor, so that defects are formally tracked. | Built | `handover/[unitId]` (snag section) |
 | H04 | As a PM, I want **handover clearance checks** (financial, technical, legal, utility, municipal, management) to be completed before handover is allowed, so that nothing is missed. | Built | `handover/[unitId]` (clearances) |
 | H05 | As Sales, I want to **execute the handover ceremony** with key issuance, document handover, and customer signature, so that possession is formally transferred. | Built | `handover/[unitId]` (handover event) |
-| H06 | As Finance, I want **handover to trigger revenue recognition** (CC method), posting DR AR / CR Revenue + DR COGS / CR WIP, so that the P&L reflects reality. | Designed | Doc 16, Section 3 |
-| H07 | As a PM, I want **DLP tracking** per contract — start date, end date, retention held, defects reported — so that warranty obligations are managed. | Designed | Doc 16, Section 3 |
-| H08 | As a Buyer, I want to **report defects through the buyer portal** during the DLP period, so that my warranty rights are exercised. | Designed | Doc 16, Section 5 |
-| H09 | As a PM, I want **retention released automatically** when DLP expires with no open defects, so that contractor settlements are timely. | Designed | Doc 16, Section 3 |
-| H10 | As Finance, I want **retention release to post GL** (DR Retention Payable / CR AP or Cash), so that the balance sheet is accurate. | Designed | Doc 16, Section 3 |
+| H06 | As Finance, I want **handover to trigger revenue recognition** (CC method), posting DR AR / CR Revenue + DR COGS / CR WIP, so that the P&L reflects reality. | Designed | Doc 51, Section 3 |
+| H07 | As a PM, I want **DLP tracking** per contract — start date, end date, retention held, defects reported — so that warranty obligations are managed. | Designed | Doc 51, Section 3 |
+| H08 | As a Buyer, I want to **report defects through the buyer portal** during the DLP period, so that my warranty rights are exercised. | Designed | Doc 51, Section 5 |
+| H09 | As a PM, I want **retention released automatically** when DLP expires with no open defects, so that contractor settlements are timely. | Designed | Doc 51, Section 3 |
+| H10 | As Finance, I want **retention release to post GL** (DR Retention Payable / CR AP or Cash), so that the balance sheet is accurate. | Designed | Doc 51, Section 3 |
 | H11 | As a PM, I want **project closure to run automated checks** (WIP=0, AR=0, no open POs, all retentions released, all DLP closed), so that nothing is forgotten. | Built | `closure` |
 | H12 | As a PM, I want to **see the final project P&L** with feasibility comparison and management sign-off, so that accountability is documented. | Built | `closure` (financial summary) |
 | H13 | As a CEO, I want to **review and approve the Feasibility vs Actual report** before closure, so that organizational learning happens. | Built | `reports/feasibility-vs-actual` |
@@ -369,16 +369,16 @@ Covered in Doc 20, Section 2. Stories would include drawing register, revision c
 | # | User Story | Status | Screen |
 |---|---|---|---|
 | A01 | As Finance, I want to **allocate corporate overheads** to projects using configurable drivers (sellable area, cost ratio, revenue ratio), so that each project carries its fair share. | Built | `reports/overhead-allocation` |
-| A02 | As Finance, I want **overhead allocation to post real GL entries** (DR WIP / CR Corporate Overhead), so that it's not just a report. | Designed | Doc 17, Section 3 |
-| A03 | As Finance, I want to **preview allocations before posting**, so that I can verify the computation. | Designed | Doc 17, Section 3 |
-| A04 | As Finance, I want to **reverse an incorrect allocation** with a new reverse entry (not by deleting), so that the audit trail is preserved. | Designed | Doc 17, Section 3 |
+| A02 | As Finance, I want **overhead allocation to post real GL entries** (DR WIP / CR Corporate Overhead), so that it's not just a report. | Designed | Doc 90, Section 3 |
+| A03 | As Finance, I want to **preview allocations before posting**, so that I can verify the computation. | Designed | Doc 90, Section 3 |
+| A04 | As Finance, I want to **reverse an incorrect allocation** with a new reverse entry (not by deleting), so that the audit trail is preserved. | Designed | Doc 90, Section 3 |
 | A05 | As Finance, I want to **allocate total project cost across units** by sellable area (or other basis), so that per-unit profitability can be computed. | Built | `reports/unit-profitability` |
 | A06 | As Finance, I want to **see unit-level profitability** (sale price minus allocated cost, margin), so that pricing decisions are informed. | Built | `reports/unit-profitability` |
 | A07 | As a CEO, I want to **see portfolio profitability** — all projects compared on margin, IRR, ROI — so that investment decisions are informed. | Built | `/real-estate` |
 | A08 | As Finance, I want the **Feasibility vs Actual comparison** to be auto-generated at closure, comparing every line of the original feasibility against actual GL data. | Built | `reports/feasibility-vs-actual` |
 | A09 | As a CEO, I want the **profit erosion waterfall** showing factor-by-factor where profit changed, so that I understand what drove variance. | Built | `reports/profit-erosion` |
-| A10 | As Finance, I want **JV profitability to show honest cost** (100% construction cost, not proportional share — ADR-005), so that margins are not misleading. | Designed | Doc 17, Section 6 |
-| A11 | As Finance, I want to **track break-even** (minimum units to sell to cover total cost) against actual sales progress, so that risk is visible. | Designed | Doc 17, Section 4 |
+| A10 | As Finance, I want **JV profitability to show honest cost** (100% construction cost, not proportional share — ADR-005), so that margins are not misleading. | Designed | Doc 90, Section 6 |
+| A11 | As Finance, I want to **track break-even** (minimum units to sell to cover total cost) against actual sales progress, so that risk is visible. | Designed | Doc 90, Section 4 |
 | A12 | As Finance, I want **WIP movement report** (Opening + Additions − Transfers = Closing) by month, so that WIP reconciliation is supported. | Built | `reports/wip-movement` |
 
 ---
@@ -390,10 +390,10 @@ Covered in Doc 20, Section 2. Stories would include drawing register, revision c
 | # | User Story | Status | Screen |
 |---|---|---|---|
 | D01-D08 | As a **[CEO/CFO/PM/Procurement/Sales/Site Eng/Land Dev]**, I want a **role-specific dashboard** showing my key metrics, attention items, and actions, so that I start my day knowing what matters. | All Built | 8 dashboard routes |
-| D09 | As any user, I want to **drill down from any KPI** to the underlying transactions → documents → journal entries, so that every number is verifiable. | Designed | Doc 18, Section 2 |
+| D09 | As any user, I want to **drill down from any KPI** to the underlying transactions → documents → journal entries, so that every number is verifiable. | Designed | Doc 60, Section 2 |
 | D10-D31 | As a **[relevant role]**, I want to **see [specific report]** with the right dimensions and filters. | All 22 Built | 22 report routes |
 
-*(All 22 reports and 8 dashboards are built in the prototype — see Doc 18 for complete list.)*
+*(All 22 reports and 8 dashboards are built in the prototype — see Doc 60 for complete list.)*
 
 ---
 
@@ -416,10 +416,10 @@ Covered in Doc 20, Section 2. Stories would include drawing register, revision c
 | X11 | As Admin, I want to **manage cost codes** with GL account mapping, so that cost classification drives correct GL posting. | Built | `masters/cost-codes` |
 | X12 | As Admin, I want to **manage BOQ item templates**, so that estimators work from a standard catalog. | Built | `masters/boq-items` |
 | X13 | As Admin, I want to **manage rate analysis templates**, so that rate breakdowns are reusable. | Built | `masters/rate-templates` |
-| X14 | As Admin, I want **all configuration to be country-neutral** — Bangladesh criteria are templates, not code — so that the same engine works for UAE, KSA, UK. | Built | Doc 07, Section 8 |
-| X15 | As Admin, I want **industry pack activation to be additive only** — activating RE seeds config, deactivating hides UI but never deletes data (ADR-008). | Designed | Doc 08, Section 2 |
+| X14 | As Admin, I want **all configuration to be country-neutral** — Bangladesh criteria are templates, not code — so that the same engine works for UAE, KSA, UK. | Built | Doc 12, Section 8 |
+| X15 | As Admin, I want **industry pack activation to be additive only** — activating RE seeds config, deactivating hides UI but never deletes data (ADR-008). | Designed | Doc 02, Section 2 |
 | X16 | As Admin, I want **seeded templates** (BD defaults) that I can modify, so that setup is fast but customizable. | Built | Settings (all seeded) |
-| X17 | As Admin, I want to **configure allocation drivers and rules** for overhead allocation, so that corporate costs are fairly distributed. | Designed | Doc 17, Section 3 |
+| X17 | As Admin, I want to **configure allocation drivers and rules** for overhead allocation, so that corporate costs are fairly distributed. | Designed | Doc 90, Section 3 |
 | X18 | As Admin, I want to **configure quality inspection templates** and safety checklists, so that site teams use standardized forms. | Planned | Doc 20 |
 
 ---

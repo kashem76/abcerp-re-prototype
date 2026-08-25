@@ -139,14 +139,14 @@ SiteInstruction
 | Revision status | User updates. Workflow: Review → Approve → Distribute |
 | RFI response due date | Config: per-project or contract (typically 5-7 working days) |
 | RFI schedule impact | User input by Planning Engineer |
-| SI cost/time impact | User assessment → may link to Change Request (Doc 15) |
+| SI cost/time impact | User assessment → may link to Change Request (Doc 50) |
 
 ---
 
 ## 3. Quality Management System (QMS)
 
 **Who needs it:** QA Engineer, Site Engineer, PM
-**Current coverage:** Doc 13 has inspection checklist designs and concrete test log, but no NCR process
+**Current coverage:** Doc 31 has inspection checklist designs and concrete test log, but no NCR process
 **Impact:** Quality failures → rework → direct cost (5-15% of construction cost in poorly managed projects)
 
 ### 3.1 What Must Be Built
@@ -219,7 +219,7 @@ ConcreteTestLog
 ## 4. Safety Management System (SMS)
 
 **Who needs it:** Safety Officer, PM, all site personnel
-**Current coverage:** Doc 13 has incident reporting design (reactive). Proactive safety is not covered.
+**Current coverage:** Doc 31 has incident reporting design (reactive). Proactive safety is not covered.
 **Impact:** Legal compliance (BNBC), insurance requirements, worker welfare, potential criminal liability
 
 ### 4.1 What Must Be Built
@@ -411,13 +411,13 @@ MeetingRecord
 
 ## 8. Handover Package Gaps
 
-**Current coverage:** Doc 16 covers unit handover and snag management well. These are documentation gaps.
+**Current coverage:** Doc 51 covers unit handover and snag management well. These are documentation gaps.
 
 | Feature | Description | Status |
 |---|---|---|
 | **As-Built Drawing Register** | Track which drawings have as-built markings | NOT COVERED |
 | **O&M Manual Checklist** | Equipment manuals, warranty cards, maintenance schedules | NOT COVERED |
-| **Warranty Register** | Per-unit warranty items: waterproofing (10yr), MEP equipment (2yr), structural (lifetime) | PARTIALLY in Doc 16 |
+| **Warranty Register** | Per-unit warranty items: waterproofing (10yr), MEP equipment (2yr), structural (lifetime) | PARTIALLY in Doc 51 |
 | **Utility Meter Reading** | Initial meter readings at handover (water, electricity, gas) | NOT COVERED |
 | **Key Register** | How many keys per unit, who received, signature | NOT COVERED |
 | **Completion Certificate** | Formal certificate per contractor/work package | PARTIALLY in Doc 12 |
@@ -430,20 +430,20 @@ MeetingRecord
 
 | Feature | Why Critical | Docs to Update |
 |---|---|---|
-| **Construction Schedule (simple Gantt + baseline + S-curve)** | Planning Engineer's entire job. Feeds SPI, delay analysis, resource planning, POC revenue | New section in Doc 13 or standalone doc |
-| **Drawing Register + RFI** | Engineers cannot function without revision control. RFIs are contractual. | New section in Doc 13 |
-| **Quality Inspections + NCR** | Rework costs 5-15% without systematic quality. Already designed, needs build. | Build from Doc 13 Section 3.3 design |
-| **Labour Costing (Muster Roll → GL)** | 25-35% of project cost with no entity model | New section in Doc 13 |
-| **Equipment Register + Costing** | 5-10% of project cost with no entity model | New section in Doc 13 |
+| **Construction Schedule (simple Gantt + baseline + S-curve)** | Planning Engineer's entire job. Feeds SPI, delay analysis, resource planning, POC revenue | New section in Doc 31 or standalone doc |
+| **Drawing Register + RFI** | Engineers cannot function without revision control. RFIs are contractual. | New section in Doc 31 |
+| **Quality Inspections + NCR** | Rework costs 5-15% without systematic quality. Already designed, needs build. | Build from Doc 31 Section 3.3 design |
+| **Labour Costing (Muster Roll → GL)** | 25-35% of project cost with no entity model | New section in Doc 31 |
+| **Equipment Register + Costing** | 5-10% of project cost with no entity model | New section in Doc 31 |
 
 ### Should Have (P2) — Important for professional construction management
 
 | Feature | Why Important | Docs to Update |
 |---|---|---|
-| **Safety Incident Reporting** | Already designed in Doc 13. Legal compliance. Build it. | Build from Doc 13 Section 3.4 |
-| **Permit to Work** | Safety compliance. Prevents incidents. | Add to Doc 13 |
+| **Safety Incident Reporting** | Already designed in Doc 13. Legal compliance. Build it. | Build from Doc 31 Section 3.4 |
+| **Permit to Work** | Safety compliance. Prevents incidents. | Add to Doc 31 |
 | **EOT Claims + LD Calculation** | Contractor dispute resolution. Financial impact. | Add to Doc 12 |
-| **Hindrance Register** | Supports EOT analysis. Schedule accountability. | Add to Doc 13 |
+| **Hindrance Register** | Supports EOT analysis. Schedule accountability. | Add to Doc 31 |
 | **Contractor Performance Scoring** | Drives future shortlisting decisions. Referenced but not spec'd. | Add to Doc 12 |
 | **Meeting Minutes + Action Items** | Coordination tool. Prevents undocumented decisions. | New lightweight doc or section |
 

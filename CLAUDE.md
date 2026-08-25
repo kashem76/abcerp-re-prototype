@@ -56,4 +56,4 @@ Each screen is a `page.tsx` that is typically `"use client"` and self-contained:
 - All monetary values are in BDT (Bangladeshi Taka), formatted via `formatBDT()`
 - Project IDs follow `RE-XXXXX` pattern
 - Screens are organized by business workflow phase (pre-project → planning → execution → revenue → closure)
-- Build progress is tracked in `_docs/build-tracker.md`
+- Build progress is tracked in `_docs/93-screen-tracker.md` and `_docs/05-build-plan.md`

@@ -936,7 +936,7 @@ Land Workspace > Feasibility
 ```
 
 - **Level 1** is covered in this section (13-15) — the collaboration system
-- **Level 2** is covered in `02-land-workspace-design.md` section 3.3 — the financial model content
+- **Level 2** is covered in `13-land-workspace-detail.md` section 3.3 — the financial model content
 - The Financial Model auto-computes from department inputs (selling price from Marketing, velocity from Sales, construction cost from Engineering, financing from Finance)
 
 ### 13.1 Task Board — The Coordinator's View

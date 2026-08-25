@@ -1,7 +1,7 @@
 # BOQ & Estimation — Complete Specification
 
 **Module:** Bill of Quantities, Work Breakdown Structure, Measurement, Rate Analysis, Budget Generation
-**Code Reference:** `11-boq-estimation.md` + `12-rate-analysis-costing.md`
+**Code Reference:** `21-boq-estimation.md` + `12-rate-analysis-costing.md`
 **Prototype Screens:** WBS Builder, BOQ List, BOQ Entry, Measurement Sheet, Rate Analysis, BOQ Approval, Cost Code Master, BOQ Item Master, Rate Templates
 
 ---

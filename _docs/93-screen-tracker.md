@@ -134,7 +134,7 @@
 
 ## Land Evaluation Module — Rewrite Tracker
 
-The Land module is being rewritten to follow the natural workflow defined in `_docs/05-land-evaluation-complete-design.md`. The old standalone screens (Opportunity, Feasibility wizard, Land Agreement) are being replaced by a unified workspace per land record.
+The Land module is being rewritten to follow the natural workflow defined in `_docs/10-land-evaluation-design.md`. The old standalone screens (Opportunity, Feasibility wizard, Land Agreement) are being replaced by a unified workspace per land record.
 
 ### Settings Layer (7 pages — ALL DONE)
 

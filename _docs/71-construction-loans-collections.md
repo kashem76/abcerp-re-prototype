@@ -1,8 +1,8 @@
 # Construction Loans & Collections Management — Complete Specification
 
 **Module:** Construction Loan Tracking, Interest Capitalization, Demand Letters, Payment Reminders, Penalty Interest, Partial Payment Allocation
-**Gap Reference:** Doc 22, Gap Group E (G26-G31)
-**Connects To:** Doc 14 (Sales/Collections), Doc 10 (GL Chain), Doc 17 (Profitability)
+**Gap Reference:** Doc 92, Gap Group E (G26-G31)
+**Connects To:** Doc 40 (Sales/Collections), Doc 10 (GL Chain), Doc 90 (Profitability)
 **Priority:** P0 — 95% of developers use bank financing. Collections is daily operations.
 
 ---

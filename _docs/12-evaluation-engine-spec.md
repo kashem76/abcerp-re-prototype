@@ -3,7 +3,7 @@
 **Module:** Configurable Multi-Department Evaluation Engine
 **Release:** R6.1 — Real Estate Industry Pack (but engine is industry-neutral)
 **Scope:** Framework Configuration → Criteria Library → Evaluation Instance → Department Work → Sign-off → Auto-Report → Management Decision
-**Prototype Authority:** `05-land-evaluation-complete-design.md` (screen detail)
+**Prototype Authority:** `10-land-evaluation-design.md` (screen detail)
 **Code Reference Counterpart:** New — to be added as `22-evaluation-engine.md` in `abcERPCode/07-abcerp-code-reference/13-real-estate-development/`
 
 ---

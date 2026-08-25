@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import {
-  MapPin, Plus, Search, ArrowRight, AlertTriangle, Clock,
-  TrendingUp, Users, Filter, ChevronRight, CircleDot,
+  MapPin, Plus, Search, AlertTriangle, Clock,
+  Users, ChevronDown, ArrowUpDown, ChevronRight,
 } from "lucide-react";
 import { formatBDT } from "@/lib/mock-data";
 
@@ -199,38 +199,98 @@ const mockLeads: LandLead[] = [
   },
 ];
 
-const stages: { label: LandStage | "All"; count: number }[] = [
-  { label: "All", count: mockLeads.length },
-  { label: "New", count: mockLeads.filter((l) => l.stage === "New").length },
-  { label: "Assessment", count: mockLeads.filter((l) => l.stage === "Assessment").length },
-  { label: "Feasibility", count: mockLeads.filter((l) => l.stage === "Feasibility").length },
-  { label: "Decision", count: mockLeads.filter((l) => l.stage === "Decision").length },
-  { label: "Acquisition", count: mockLeads.filter((l) => l.stage === "Acquisition").length },
-  { label: "Closed", count: mockLeads.filter((l) => l.stage === "Closed").length },
-];
+const stageOrder: LandStage[] = ["New", "Assessment", "Feasibility", "Decision", "Acquisition", "Closed"];
 
-const stageBadgeColor: Record<LandStage, string> = {
-  New: "bg-slate-100 text-slate-800",
-  Assessment: "bg-blue-100 text-blue-800",
-  Feasibility: "bg-purple-100 text-purple-800",
-  Decision: "bg-amber-100 text-amber-800",
-  Acquisition: "bg-emerald-100 text-emerald-800",
+const stageBadgeStyle: Record<LandStage, string> = {
+  New: "bg-slate-100 text-slate-700",
+  Assessment: "bg-blue-100 text-blue-700",
+  Feasibility: "bg-purple-100 text-purple-700",
+  Decision: "bg-amber-100 text-amber-700",
+  Acquisition: "bg-emerald-100 text-emerald-700",
   Closed: "bg-gray-100 text-gray-500",
 };
 
-const deptStatusColor: Record<string, string> = {
-  "Complete": "text-emerald-600",
-  "Signed Off": "text-emerald-600",
-  "In Progress": "text-blue-600",
-  "Under Review": "text-amber-600",
-  "Not Started": "text-gray-400",
-  "Waiting": "text-gray-400",
+const deptDotColor: Record<string, string> = {
+  "Complete": "bg-emerald-500",
+  "Signed Off": "bg-emerald-500",
+  "In Progress": "bg-blue-500",
+  "Under Review": "bg-amber-500",
+  "Not Started": "bg-gray-300",
+  "Waiting": "bg-gray-300",
 };
 
-function agingColor(days: number) {
-  if (days < 30) return "text-emerald-600";
-  if (days < 60) return "text-amber-600";
-  return "text-red-600";
+const deptAbbrev: Record<string, string> = {
+  "Land & Site": "LS",
+  "Engineering": "EN",
+  "Legal": "LG",
+  "Marketing": "MK",
+  "Finance": "FN",
+};
+
+type SortOption = "newest" | "oldest" | "value-high" | "value-low" | "progress" | "attention";
+
+const sortLabels: Record<SortOption, string> = {
+  "newest": "Newest First",
+  "oldest": "Oldest First",
+  "value-high": "Value: High → Low",
+  "value-low": "Value: Low → High",
+  "progress": "Progress",
+  "attention": "Needs Attention",
+};
+
+function agingBadge(days: number) {
+  if (days < 30) return { cls: "text-emerald-700 bg-emerald-50", label: "On track" };
+  if (days < 60) return { cls: "text-amber-700 bg-amber-50", label: "Overdue" };
+  return { cls: "text-red-700 bg-red-50", label: "Stale" };
+}
+
+// ─── Dropdown helper ───────────────────────────────────────────
+
+function Dropdown<T extends string>({
+  value,
+  options,
+  labels,
+  onChange,
+  icon,
+  prefix,
+}: {
+  value: T;
+  options: T[];
+  labels: Record<T, string>;
+  onChange: (v: T) => void;
+  icon?: React.ReactNode;
+  prefix?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 px-3 py-2 text-sm border rounded-lg bg-white hover:bg-muted/50 transition-colors"
+      >
+        {icon}
+        {prefix && <span className="text-muted-foreground">{prefix}</span>}
+        <span className="font-medium">{labels[value]}</span>
+        <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+      </button>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className="absolute left-0 top-full mt-1 z-50 bg-white border rounded-lg shadow-lg py-1 min-w-44">
+            {options.map((opt) => (
+              <button
+                key={opt}
+                className={`w-full text-left px-3 py-2 text-sm hover:bg-muted transition-colors ${value === opt ? "bg-muted font-medium" : ""}`}
+                onClick={() => { onChange(opt); setOpen(false); }}
+              >
+                {labels[opt]}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 // ─── Component ─────────────────────────────────────────────────
@@ -238,16 +298,34 @@ function agingColor(days: number) {
 export default function LandPipelinePage() {
   const [activeStage, setActiveStage] = useState<LandStage | "All">("All");
   const [search, setSearch] = useState("");
-
-  const filtered = mockLeads.filter((lead) => {
-    if (activeStage !== "All" && lead.stage !== activeStage) return false;
-    if (search && !lead.name.toLowerCase().includes(search.toLowerCase()) && !lead.location.toLowerCase().includes(search.toLowerCase())) return false;
-    return true;
-  });
+  const [sort, setSort] = useState<SortOption>("newest");
 
   const activeLeads = mockLeads.filter((l) => l.stage !== "Closed");
   const totalValue = activeLeads.reduce((s, l) => s + l.expectedPrice, 0);
   const totalAttention = activeLeads.reduce((s, l) => s + l.attentionCount, 0);
+  const inDecisionCount = mockLeads.filter((l) => l.stage === "Decision").length;
+
+  // Filtering + sorting
+  const filtered = mockLeads
+    .filter((lead) => {
+      if (activeStage !== "All" && lead.stage !== activeStage) return false;
+      if (search) {
+        const q = search.toLowerCase();
+        return lead.name.toLowerCase().includes(q) || lead.location.toLowerCase().includes(q);
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      switch (sort) {
+        case "newest": return a.createdDaysAgo - b.createdDaysAgo;
+        case "oldest": return b.createdDaysAgo - a.createdDaysAgo;
+        case "value-high": return b.expectedPrice - a.expectedPrice;
+        case "value-low": return a.expectedPrice - b.expectedPrice;
+        case "progress": return b.overallProgress - a.overallProgress;
+        case "attention": return b.attentionCount - a.attentionCount;
+        default: return 0;
+      }
+    });
 
   // Team performance
   const teamPerf = Object.entries(
@@ -259,15 +337,21 @@ export default function LandPipelinePage() {
     }, {})
   );
 
+  // Stage dropdown labels with counts
+  const stageLabels = {
+    All: `All (${mockLeads.length})`,
+    ...Object.fromEntries(stageOrder.map((s) => [s, `${s} (${mockLeads.filter((l) => l.stage === s).length})`])),
+  } as Record<LandStage | "All", string>;
+
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-5 p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <MapPin className="h-7 w-7 text-blue-600" />
+          <MapPin className="h-6 w-6 text-blue-600" />
           <div>
             <h1 className="text-2xl font-bold">Land Pipeline</h1>
-            <p className="text-muted-foreground">One pipeline, one workspace per land.</p>
+            <p className="text-sm text-muted-foreground">One pipeline, one workspace per land.</p>
           </div>
         </div>
         <Link href="/real-estate/land-leads/new">
@@ -277,52 +361,53 @@ export default function LandPipelinePage() {
         </Link>
       </div>
 
-      {/* Funnel Summary */}
+      {/* ── KPI Strip ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
-          <CardContent className="pt-4">
-            <p className="text-sm text-muted-foreground">Active Leads</p>
+          <CardContent className="py-4">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Active Leads</p>
             <p className="text-2xl font-bold">{activeLeads.length}</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
-            <p className="text-sm text-muted-foreground">Total Pipeline Value</p>
+          <CardContent className="py-4">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Total Pipeline Value</p>
             <p className="text-2xl font-bold">{formatBDT(totalValue)}</p>
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="pt-4">
-            <p className="text-sm text-muted-foreground">In Decision</p>
-            <p className="text-2xl font-bold">{mockLeads.filter((l) => l.stage === "Decision").length}</p>
+          <CardContent className="py-4">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">In Decision</p>
+            <p className="text-2xl font-bold">{inDecisionCount}</p>
           </CardContent>
         </Card>
         <Card className={totalAttention > 0 ? "border-amber-300" : ""}>
-          <CardContent className="pt-4">
-            <p className="text-sm text-muted-foreground">Need Attention</p>
+          <CardContent className="py-4">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Need Attention</p>
             <p className={`text-2xl font-bold ${totalAttention > 0 ? "text-amber-600" : ""}`}>{totalAttention}</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Stage Filter Tabs + Search */}
+      {/* ── Filter Row: Stage dropdown + Sort dropdown + Search ── */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex gap-1 bg-muted rounded-lg p-1">
-          {stages.map((s) => (
-            <button
-              key={s.label}
-              className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-                activeStage === s.label
-                  ? "bg-white text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              onClick={() => setActiveStage(s.label)}
-            >
-              {s.label} <span className="text-xs ml-1 opacity-60">{s.count}</span>
-            </button>
-          ))}
-        </div>
-        <div className="relative flex-1 min-w-[200px] max-w-sm ml-auto">
+        <Dropdown
+          value={activeStage}
+          options={["All", ...stageOrder] as (LandStage | "All")[]}
+          labels={stageLabels}
+          onChange={setActiveStage}
+          prefix="Stage:"
+        />
+
+        <Dropdown
+          value={sort}
+          options={Object.keys(sortLabels) as SortOption[]}
+          labels={sortLabels}
+          onChange={setSort}
+          icon={<ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground" />}
+        />
+
+        <div className="relative flex-1 min-w-48 max-w-xs ml-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search lands..."
@@ -333,107 +418,164 @@ export default function LandPipelinePage() {
         </div>
       </div>
 
-      {/* Lead Cards */}
-      <div className="space-y-3">
-        {filtered.map((lead) => (
-          <Link key={lead.id} href={`/real-estate/land-leads/${lead.id}/work`}>
-            <Card className="hover:border-primary/40 transition-colors cursor-pointer mb-3">
-              <CardContent className="pt-5 pb-4">
-                <div className="flex gap-4">
-                  {/* Main content */}
-                  <div className="flex-1 min-w-0">
-                    {/* Top row */}
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-base">{lead.name}</h3>
-                      <Badge className={stageBadgeColor[lead.stage]}>{lead.stage}</Badge>
-                      {lead.attentionCount > 0 && (
-                        <Badge variant="destructive" className="text-[10px] gap-1">
-                          <AlertTriangle className="h-3 w-3" /> {lead.attentionCount}
+      {/* ── Table Header ── */}
+      <div className="hidden md:grid grid-cols-12 gap-4 px-5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+        <div className="col-span-3">Lead Name / Location</div>
+        <div className="col-span-2">Size / Value</div>
+        <div className="col-span-2">Stage / Progress</div>
+        <div className="col-span-3">Next Step</div>
+        <div className="col-span-1 text-right">Assigned</div>
+        <div className="col-span-1 text-right">Action</div>
+      </div>
+
+      {/* ── Lead Rows ── */}
+      <div className="space-y-2">
+        {filtered.map((lead) => {
+          const aging = agingBadge(lead.createdDaysAgo);
+          const hasAttention = lead.attentionCount > 0;
+
+          return (
+            <div key={lead.id}>
+              {/* Attention strip — sits above the row */}
+              {hasAttention && (
+                <div className="flex items-center gap-2 px-5 py-1.5 text-xs text-amber-800 bg-amber-50 border border-b-0 border-amber-200 rounded-t-lg">
+                  <AlertTriangle className="h-3 w-3 text-amber-600 shrink-0" />
+                  <span className="font-medium">{lead.attentionItems[0]}</span>
+                  {lead.attentionItems.length > 1 && (
+                    <span className="text-amber-500">+{lead.attentionItems.length - 1} more</span>
+                  )}
+                </div>
+              )}
+
+              <Card className={`hover:border-primary/30 hover:shadow-sm transition-all ${hasAttention ? "rounded-t-none border-t-amber-200" : ""}`}>
+                <CardContent className="py-4 px-5">
+                  {/* Desktop: table row */}
+                  <div className="hidden md:grid grid-cols-12 gap-4 items-center">
+                    {/* Lead Name / Location */}
+                    <div className="col-span-3">
+                      <div className="flex items-center gap-1.5">
+                        <p className="font-semibold text-sm truncate">{lead.name}</p>
+                        {hasAttention && (
+                          <span className="flex items-center justify-center h-4 w-4 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold shrink-0">
+                            {lead.attentionCount}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5">{lead.location}</p>
+                    </div>
+
+                    {/* Size / Value */}
+                    <div className="col-span-2">
+                      <p className="text-sm">{lead.area}</p>
+                      <p className="text-xs text-muted-foreground">{formatBDT(lead.expectedPrice)}</p>
+                    </div>
+
+                    {/* Stage / Progress */}
+                    <div className="col-span-2">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <Badge className={`text-[11px] font-medium ${stageBadgeStyle[lead.stage]}`}>
+                          {lead.stage}
                         </Badge>
+                        {lead.stage !== "New" && lead.stage !== "Closed" && (
+                          <span className="text-xs text-muted-foreground tabular-nums">{lead.overallProgress}%</span>
+                        )}
+                      </div>
+                      {lead.stage !== "New" && lead.stage !== "Closed" && (
+                        <Progress value={lead.overallProgress} className="h-1 w-full" />
+                      )}
+                      {/* Dept dots */}
+                      {lead.deptStatus.length > 0 && (
+                        <div className="flex items-center gap-1.5 mt-2">
+                          {lead.deptStatus.map((d) => (
+                            <div
+                              key={d.name}
+                              className="flex items-center gap-1"
+                              title={`${d.name}: ${d.status}`}
+                            >
+                              <div className={`h-1.5 w-1.5 rounded-full ${deptDotColor[d.status] || "bg-gray-300"}`} />
+                              <span className="text-[10px] text-muted-foreground">{deptAbbrev[d.name] || d.name.slice(0, 2).toUpperCase()}</span>
+                            </div>
+                          ))}
+                        </div>
                       )}
                     </div>
 
-                    {/* Location / details */}
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                      <span>{lead.location}</span>
+                    {/* Next Step */}
+                    <div className="col-span-3">
+                      {lead.nextAction !== "—" ? (
+                        <p className="text-sm text-muted-foreground leading-snug">{lead.nextAction}</p>
+                      ) : (
+                        <p className="text-xs text-muted-foreground italic">No pending action</p>
+                      )}
+                      <p className="text-[11px] text-muted-foreground/70 mt-1">Updated {lead.updatedAgo}</p>
+                    </div>
+
+                    {/* Assigned / Status */}
+                    <div className="col-span-1 text-right">
+                      <p className="text-sm font-medium">{lead.assignedTo}</p>
+                      <div className={`inline-flex items-center gap-1 text-[11px] font-medium mt-1 px-2 py-0.5 rounded-full ${aging.cls}`}>
+                        <Clock className="h-2.5 w-2.5" />
+                        {aging.label}
+                      </div>
+                    </div>
+
+                    {/* Action */}
+                    <div className="col-span-1 text-right">
+                      <Link href={`/real-estate/land-leads/${lead.id}/work`}>
+                        <Button variant="outline" size="sm" className="text-xs h-8">
+                          Open
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Mobile: stacked layout */}
+                  <Link href={`/real-estate/land-leads/${lead.id}/work`} className="md:hidden block">
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-sm">{lead.name}</p>
+                          <Badge className={`text-[10px] ${stageBadgeStyle[lead.stage]}`}>{lead.stage}</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">{lead.location}</p>
+                      </div>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 mt-1" />
+                    </div>
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground mb-2">
                       <span>{lead.area}</span>
                       <span>{formatBDT(lead.expectedPrice)}</span>
+                      <span>{lead.assignedTo}</span>
                     </div>
-
-                    {/* Progress */}
                     {lead.stage !== "New" && lead.stage !== "Closed" && (
-                      <div className="mb-3">
-                        <div className="flex items-center gap-3 mb-1">
-                          <span className="text-xs text-muted-foreground">Progress</span>
-                          <span className="text-xs font-medium">{lead.overallProgress}%</span>
-                        </div>
-                        <Progress value={lead.overallProgress} className="h-1.5" />
+                      <div className="flex items-center gap-2">
+                        <Progress value={lead.overallProgress} className="h-1 flex-1" />
+                        <span className="text-[11px] text-muted-foreground tabular-nums">{lead.overallProgress}%</span>
                       </div>
                     )}
-
-                    {/* Department status */}
-                    {lead.deptStatus.length > 0 && (
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mb-3">
-                        {lead.deptStatus.map((d) => (
-                          <span key={d.name} className={deptStatusColor[d.status] || "text-gray-500"}>
-                            {d.name}: {d.status}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Attention */}
-                    {lead.attentionItems.length > 0 && (
-                      <div className="space-y-1 mb-3">
-                        {lead.attentionItems.map((item, i) => (
-                          <p key={i} className="text-xs text-amber-700 flex items-center gap-1">
-                            <AlertTriangle className="h-3 w-3" /> {item}
-                          </p>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Next Action */}
-                    {lead.nextAction !== "—" && (
-                      <div className="flex items-center gap-2 text-sm">
-                        <span className="text-muted-foreground">Next:</span>
-                        <span className="font-medium">{lead.nextAction}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Right side */}
-                  <div className="flex flex-col items-end justify-between text-right shrink-0">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Owner: {lead.assignedTo}</p>
-                      <p className="text-xs text-muted-foreground">{lead.updatedAgo}</p>
-                    </div>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className={`text-xs ${agingColor(lead.createdDaysAgo)}`}>
-                        <Clock className="h-3 w-3 inline mr-1" />
-                        {lead.createdDaysAgo}d
-                      </span>
-                      <Button variant="outline" size="sm" className="gap-1 text-xs">
-                        Open <ChevronRight className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+          );
+        })}
       </div>
 
       {filtered.length === 0 && (
         <Card className="border-dashed">
-          <CardContent className="pt-6 text-center text-muted-foreground">
-            No lands match the current filter.
+          <CardContent className="py-10 text-center">
+            <Search className="h-8 w-8 text-muted-foreground/40 mx-auto mb-2" />
+            <p className="text-sm text-muted-foreground">No lands match your filters.</p>
+            <button
+              className="text-sm text-blue-600 hover:underline mt-1"
+              onClick={() => { setActiveStage("All"); setSearch(""); }}
+            >
+              Clear filters
+            </button>
           </CardContent>
         </Card>
       )}
 
-      {/* Team Performance */}
+      {/* ── Team Performance ── */}
       <Separator />
       <div>
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-2">
@@ -442,10 +584,10 @@ export default function LandPipelinePage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {teamPerf.map(([name, data]) => (
             <Card key={name}>
-              <CardContent className="pt-4">
-                <p className="text-sm font-medium">{name}</p>
+              <CardContent className="py-4">
+                <p className="text-sm font-semibold">{name}</p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {data.total} active leads &middot; {data.progressed} progressing
+                  {data.total} active {data.total === 1 ? "lead" : "leads"} &middot; {data.progressed} progressing
                 </p>
               </CardContent>
             </Card>

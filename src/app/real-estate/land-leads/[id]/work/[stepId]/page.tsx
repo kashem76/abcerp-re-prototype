@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -38,19 +39,158 @@ interface AssessmentCriterion {
   evidence?: string[];
 }
 
-const criteria: AssessmentCriterion[] = [
-  { id: "EC1", name: "Site Accessibility", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Access road is 40ft wide. Heavy equipment can enter from south side. Minor congestion during peak hours.", riskLevel: "Low", recommendation: "Proceed", evidence: ["Site_Access_Photo.jpg"] },
-  { id: "EC2", name: "Existing Site Condition", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Site is relatively flat with minimal existing structures. One temporary shed to be demolished.", riskLevel: "Low", recommendation: "Proceed", evidence: ["Site_Condition_Report.pdf"] },
-  { id: "EC3", name: "Topography", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Generally flat terrain with slight slope to the east. No significant grading required.", riskLevel: "Low", recommendation: "Proceed" },
-  { id: "EC4", name: "Soil Condition", type: "Rating", status: "complete", rating: 3, ratingLabel: "Acceptable", assessment: "Preliminary bore-log indicates alluvial soil. Bearing capacity adequate for pile foundation. Water table at 8ft.", riskLevel: "Medium", recommendation: "Proceed with Conditions", evidence: ["Bore_Log_Preliminary.pdf", "Soil_Test_Lab.pdf"] },
-  { id: "EC5", name: "Buildable Area", type: "Numeric", status: "complete", rating: 5, ratingLabel: "Excellent", assessment: "After RAJUK setbacks: 24,800 sqft buildable. No road widening impact. No easements identified.", riskLevel: "Low", recommendation: "Proceed" },
-  { id: "EC6", name: "Utility Availability", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "WASA, DESCO, Titas Gas all available within 200m. Capacity adequate for 14-story building.", riskLevel: "Low", recommendation: "Proceed", evidence: ["Utility_Survey.pdf"] },
-  { id: "EC7", name: "Construction Constraints", type: "Rating", status: "complete", rating: 3, ratingLabel: "Acceptable", assessment: "Adjacent buildings on north and east. Need careful piling. Limited storage area — offsite staging may be needed.", riskLevel: "Medium", recommendation: "Proceed with Conditions" },
-  { id: "EC8", name: "Foundation Requirement", type: "Rating", status: "in-progress", rating: 3, ratingLabel: "Acceptable" },
-  { id: "EC9", name: "Site Preparation", type: "Rating", status: "not-started" },
-  { id: "EC10", name: "Construction Approach", type: "Rating", status: "not-started" },
-  { id: "EC11", name: "Technical Risk", type: "Rating", status: "not-started" },
-];
+interface StepData {
+  title: string;
+  assignee: string;
+  reviewer: string;
+  due: string;
+  status: string;
+  criteria: AssessmentCriterion[];
+  findings: Finding[];
+  files: { name: string; criterion: string; uploaded: string; size: string }[];
+  discussions: { user: string; time: string; text: string }[];
+}
+
+const stepDataMap: Record<string, StepData> = {
+  engineering: {
+    title: "Engineering Assessment", assignee: "Eng. Rafi", reviewer: "Chief Engineer", due: "22 Aug", status: "In Progress",
+    criteria: [
+      { id: "EC1", name: "Site Accessibility", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Access road is 40ft wide. Heavy equipment can enter from south side.", riskLevel: "Low", recommendation: "Proceed", evidence: ["Site_Access_Photo.jpg"] },
+      { id: "EC2", name: "Existing Site Condition", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Site is relatively flat with minimal existing structures.", riskLevel: "Low", recommendation: "Proceed" },
+      { id: "EC3", name: "Topography", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Generally flat terrain with slight slope to the east.", riskLevel: "Low", recommendation: "Proceed" },
+      { id: "EC4", name: "Soil Condition", type: "Rating", status: "complete", rating: 3, ratingLabel: "Acceptable", assessment: "Pile foundation likely required. Water table at 8ft.", riskLevel: "Medium", recommendation: "Proceed with Conditions", evidence: ["Bore_Log.pdf", "Soil_Test.pdf"] },
+      { id: "EC5", name: "Buildable Area", type: "Numeric", status: "complete", rating: 5, ratingLabel: "Excellent", assessment: "24,800 sqft buildable after setbacks.", riskLevel: "Low", recommendation: "Proceed" },
+      { id: "EC6", name: "Utility Availability", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "WASA, DESCO, Titas Gas all available within 200m.", riskLevel: "Low", recommendation: "Proceed", evidence: ["Utility_Survey.pdf"] },
+      { id: "EC7", name: "Construction Constraints", type: "Rating", status: "complete", rating: 3, ratingLabel: "Acceptable", assessment: "Adjacent buildings require careful piling.", riskLevel: "Medium", recommendation: "Proceed with Conditions" },
+      { id: "EC8", name: "Foundation Requirement", type: "Rating", status: "in-progress", rating: 3, ratingLabel: "Acceptable" },
+      { id: "EC9", name: "Site Preparation", type: "Rating", status: "not-started" },
+      { id: "EC10", name: "Construction Approach", type: "Rating", status: "not-started" },
+      { id: "EC11", name: "Technical Risk", type: "Rating", status: "not-started" },
+    ],
+    findings: [
+      { id: "F001", title: "Pile foundation likely required", criterion: "Soil Condition", severity: "Medium", impact: "Foundation cost may be 8-12% higher than benchmark.", recommendation: "Include pile foundation estimate in preliminary cost.", owner: "Engineering", status: "Open" },
+      { id: "F002", title: "Access road may not support piling equipment", criterion: "Site Accessibility", severity: "Medium", impact: "May need temporary road reinforcement.", recommendation: "Schedule piling during low-traffic hours.", owner: "Engineering", status: "Open" },
+    ],
+    files: [
+      { name: "Bore_Log.pdf", criterion: "Soil Condition", uploaded: "15 Aug", size: "2.4 MB" },
+      { name: "Soil_Test.pdf", criterion: "Soil Condition", uploaded: "15 Aug", size: "1.1 MB" },
+      { name: "Utility_Survey.pdf", criterion: "Utility Availability", uploaded: "14 Aug", size: "1.8 MB" },
+    ],
+    discussions: [
+      { user: "Eng. Rafi", time: "6h ago", text: "Bore-log results suggest pile depth of 55-60ft." },
+      { user: "Chief Engineer", time: "4h ago", text: "Use 60ft as planning assumption." },
+    ],
+  },
+  legal: {
+    title: "Legal Assessment", assignee: "Adv. Rahman", reviewer: "Head of Legal", due: "20 Aug", status: "In Review",
+    criteria: [
+      { id: "LC1", name: "Ownership Verification", type: "Pass/Fail", status: "complete", ratingLabel: "Pass", assessment: "Ownership verified through original deed and NID match.", recommendation: "Proceed", evidence: ["Title_Deed.pdf", "NID_Verification.pdf"] },
+      { id: "LC2", name: "Chain of Title", type: "Pass/Fail", status: "complete", ratingLabel: "Pass", assessment: "Unbroken chain from 1998 RS record to current seller.", recommendation: "Proceed", evidence: ["Chain_of_Title.pdf"] },
+      { id: "LC3", name: "Encumbrance Check", type: "Pass/Fail", status: "complete", ratingLabel: "Pass", assessment: "No mortgages, liens, or encumbrances found.", recommendation: "Proceed", evidence: ["Encumbrance_Certificate.pdf"] },
+      { id: "LC4", name: "Mutation Verification", type: "Pass/Fail", status: "complete", ratingLabel: "Fail", assessment: "Mutation record has discrepancy with current deed. Correction needed before registration.", riskLevel: "Medium", recommendation: "Proceed with Conditions", evidence: ["Mutation_Certificate.pdf"] },
+      { id: "LC5", name: "Litigation Search", type: "Pass/Fail", status: "complete", ratingLabel: "Pass", assessment: "No pending or past litigation found in court records.", recommendation: "Proceed" },
+      { id: "LC6", name: "Seller Authority", type: "Pass/Fail", status: "complete", ratingLabel: "Pass", assessment: "Seller has full authority. No POA issues.", recommendation: "Proceed" },
+      { id: "LC7", name: "Power of Attorney", type: "Pass/Fail", status: "complete", ratingLabel: "N/A", assessment: "Direct sale by owner. No POA involved.", recommendation: "Proceed" },
+      { id: "LC8", name: "Succession Certificate", type: "Pass/Fail", status: "complete", ratingLabel: "Pending", assessment: "One co-owner's succession certificate is pending court issuance.", riskLevel: "Low", recommendation: "Proceed with Conditions" },
+      { id: "LC9", name: "Govt Acquisition Notice", type: "Pass/Fail", status: "complete", ratingLabel: "Pass", assessment: "No government acquisition notices found.", recommendation: "Proceed" },
+    ],
+    findings: [
+      { id: "LF1", title: "Mutation record needs correction", criterion: "Mutation Verification", severity: "Medium", impact: "Registration cannot proceed without corrected mutation.", recommendation: "Obtain corrected mutation certificate from AC Land office.", owner: "Legal", status: "Open" },
+      { id: "LF2", title: "Succession certificate pending", criterion: "Succession Certificate", severity: "Low", impact: "One co-owner's succession certificate pending.", recommendation: "Follow up with court. Expected within 2 weeks.", owner: "Legal", status: "Open" },
+    ],
+    files: [
+      { name: "Title_Deed.pdf", criterion: "Ownership", uploaded: "12 Aug", size: "3.2 MB" },
+      { name: "Encumbrance_Certificate.pdf", criterion: "Encumbrance", uploaded: "13 Aug", size: "0.8 MB" },
+      { name: "Mutation_Certificate.pdf", criterion: "Mutation", uploaded: "14 Aug", size: "1.2 MB" },
+    ],
+    discussions: [
+      { user: "Adv. Rahman", time: "1d ago", text: "Mutation discrepancy identified. AC Land office appointment set for next week." },
+      { user: "Head of Legal", time: "12h ago", text: "Confirm timeline for succession certificate. We need it before registration." },
+    ],
+  },
+  "land-site": {
+    title: "Land & Site Assessment", assignee: "Rahim", reviewer: "BD Head", due: "14 Aug", status: "Complete",
+    criteria: [
+      { id: "LS1", name: "Location Suitability", type: "Rating", status: "complete", rating: 5, ratingLabel: "Excellent", assessment: "Prime Gulshan location. Established residential area.", recommendation: "Proceed" },
+      { id: "LS2", name: "Road Access & Width", type: "Numeric", status: "complete", rating: 5, ratingLabel: "40 ft", assessment: "40ft road. Good connectivity to main roads.", recommendation: "Proceed" },
+      { id: "LS3", name: "Neighborhood Character", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Primarily residential with some commercial. Well-maintained area.", recommendation: "Proceed" },
+      { id: "LS4", name: "Land Shape & Dimensions", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Regular rectangular shape. Good frontage-to-depth ratio.", recommendation: "Proceed" },
+      { id: "LS5", name: "Surrounding Development", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Mix of 8-14 story buildings. Good density match.", recommendation: "Proceed" },
+      { id: "LS6", name: "Owner Information", type: "Pass/Fail", status: "complete", ratingLabel: "Verified", assessment: "Single owner. Cooperative. Interested in JV arrangement.", recommendation: "Proceed" },
+    ],
+    findings: [],
+    files: [
+      { name: "Site_Photos.zip", criterion: "Location", uploaded: "10 Aug", size: "12.4 MB" },
+      { name: "Location_Map.pdf", criterion: "Location", uploaded: "10 Aug", size: "2.1 MB" },
+    ],
+    discussions: [
+      { user: "Rahim", time: "5d ago", text: "Site visit completed. Owner is very cooperative and interested in JV." },
+    ],
+  },
+  market: {
+    title: "Market Assessment", assignee: "Nadia", reviewer: "Marketing Head", due: "19 Aug", status: "Complete",
+    criteria: [
+      { id: "MK1", name: "Market Demand", type: "Rating", status: "complete", rating: 5, ratingLabel: "Very Strong", assessment: "Strong demand for premium residential in Gulshan. Low vacancy.", recommendation: "Proceed" },
+      { id: "MK2", name: "Expected Selling Price", type: "Amount", status: "complete", ratingLabel: "৳12,000/sqft", assessment: "Comparable projects: ৳11,500-13,000/sqft. ৳12,000 is achievable.", recommendation: "Proceed" },
+      { id: "MK3", name: "Competitive Supply", type: "Rating", status: "complete", rating: 4, ratingLabel: "Moderate", assessment: "3 comparable projects within 1km. Absorption rate healthy.", recommendation: "Proceed" },
+      { id: "MK4", name: "Price Trend", type: "Rating", status: "complete", rating: 4, ratingLabel: "Stable/Up", assessment: "Prices trending up 3-5% annually in Gulshan.", recommendation: "Proceed" },
+      { id: "MK5", name: "Target Demographic", type: "Choice", status: "complete", ratingLabel: "Premium Residential", assessment: "Upper-middle to high income. Professionals and business owners.", recommendation: "Proceed" },
+      { id: "MK6", name: "Infrastructure Development", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Metro line nearby. Road improvements planned.", recommendation: "Proceed" },
+      { id: "MK7", name: "Comparable Projects", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Analyzed 5 recent launches. All performing well.", recommendation: "Proceed" },
+      { id: "MK8", name: "Marketing Complexity", type: "Rating", status: "complete", rating: 4, ratingLabel: "Standard", assessment: "Standard marketing approach. Location sells itself.", recommendation: "Proceed" },
+    ],
+    findings: [],
+    files: [
+      { name: "Market_Analysis.pdf", criterion: "Market Demand", uploaded: "16 Aug", size: "5.2 MB" },
+      { name: "Comparable_Sales.xlsx", criterion: "Expected Price", uploaded: "16 Aug", size: "0.4 MB" },
+    ],
+    discussions: [
+      { user: "Nadia", time: "2d ago", text: "Market analysis complete. Gulshan remains one of the strongest markets." },
+    ],
+  },
+  regulatory: {
+    title: "Regulatory Review", assignee: "Kamal", reviewer: "Planning Head", due: "21 Aug", status: "Not Started",
+    criteria: [
+      { id: "RG1", name: "Zoning Compliance", type: "Pass/Fail", status: "not-started" },
+      { id: "RG2", name: "FAR / Coverage Limit", type: "Numeric", status: "not-started" },
+      { id: "RG3", name: "Height Restriction", type: "Numeric", status: "not-started" },
+      { id: "RG4", name: "Environmental Clearance", type: "Pass/Fail", status: "not-started" },
+      { id: "RG5", name: "RAJUK Approval", type: "Pass/Fail", status: "not-started" },
+      { id: "RG6", name: "Road Widening Impact", type: "Numeric", status: "not-started" },
+    ],
+    findings: [], files: [], discussions: [],
+  },
+  sales: {
+    title: "Sales Assessment", assignee: "Tariq", reviewer: "Sales Head", due: "22 Aug", status: "In Review",
+    criteria: [
+      { id: "SA1", name: "Sales Velocity Estimate", type: "Numeric", status: "complete", ratingLabel: "8 units/qtr", assessment: "Based on comparable projects and market demand.", recommendation: "Proceed" },
+      { id: "SA2", name: "Pre-Sales Potential", type: "Rating", status: "complete", rating: 5, ratingLabel: "Strong", assessment: "High pre-sales potential given Gulshan demand.", recommendation: "Proceed" },
+      { id: "SA3", name: "Payment Plan Feasibility", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Standard 40-30-20-10 milestone plan works.", recommendation: "Proceed" },
+      { id: "SA4", name: "Customer Profile Match", type: "Rating", status: "complete", rating: 4, ratingLabel: "Good", assessment: "Strong match with our target customer base.", recommendation: "Proceed" },
+      { id: "SA5", name: "Competition Impact", type: "Rating", status: "complete", rating: 3, ratingLabel: "Moderate", assessment: "3 nearby projects but differentiated by location.", recommendation: "Proceed" },
+    ],
+    findings: [], files: [], discussions: [
+      { user: "Tariq", time: "1d ago", text: "Sales assessment submitted. Strong pre-sales potential." },
+    ],
+  },
+  financial: {
+    title: "Financial Feasibility", assignee: "Analyst", reviewer: "CFO", due: "25 Aug", status: "Not Started",
+    criteria: [
+      { id: "FN1", name: "IRR", type: "Percentage", status: "not-started" },
+      { id: "FN2", name: "Net Profit Margin", type: "Percentage", status: "not-started" },
+      { id: "FN3", name: "Payback Period", type: "Numeric", status: "not-started" },
+      { id: "FN4", name: "Peak Funding Requirement", type: "Amount", status: "not-started" },
+      { id: "FN5", name: "Break-Even Analysis", type: "Numeric", status: "not-started" },
+      { id: "FN6", name: "Finance Cost Sensitivity", type: "Rating", status: "not-started" },
+    ],
+    findings: [], files: [], discussions: [],
+  },
+};
+
+const defaultStep: StepData = {
+  title: "Assessment", assignee: "—", reviewer: "—", due: "—", status: "Not Started",
+  criteria: [], findings: [], files: [], discussions: [],
+};
 
 interface Finding {
   id: string;
@@ -63,7 +203,7 @@ interface Finding {
   status: "Open" | "Resolved";
 }
 
-const findings: Finding[] = [
+const oldFindings: Finding[] = [
   {
     id: "F001", title: "Pile foundation likely required", criterion: "Soil Condition",
     severity: "Medium", impact: "Foundation cost may be 8-12% higher than standard company benchmark.",
@@ -101,11 +241,26 @@ const discussions = [
 // ─── Component ─────────────────────────────────────────────────
 
 export default function StepAssessmentPage() {
+  const params = useParams();
+  const stepId = params.stepId as string;
+  const step = stepDataMap[stepId] || defaultStep;
+  const criteria = step.criteria;
+  const findings = step.findings;
+  const files = step.files;
+  const discussions = step.discussions;
+
   const [activeTab, setActiveTab] = useState("assessment");
-  const [expandedCriterion, setExpandedCriterion] = useState<string | null>("EC8");
+  const [expandedCriterion, setExpandedCriterion] = useState<string | null>(
+    criteria.find((c) => c.status === "in-progress")?.id || null
+  );
 
   const completed = criteria.filter((c) => c.status === "complete").length;
-  const allDone = completed === criteria.length;
+  const allDone = completed === criteria.length && criteria.length > 0;
+
+  const statusBadge = step.status === "Complete" ? "bg-emerald-100 text-emerald-800" :
+    step.status === "In Review" ? "bg-amber-100 text-amber-800" :
+    step.status === "Not Started" ? "bg-gray-100 text-gray-700" :
+    "bg-blue-100 text-blue-800";
 
   return (
     <div className="space-y-6 p-6">
@@ -115,26 +270,26 @@ export default function StepAssessmentPage() {
           href="/real-estate/land-leads/LL-2026-001/work"
           className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 mb-2"
         >
-          <ChevronLeft className="h-4 w-4" /> Work Board
+          <ChevronLeft className="h-4 w-4" /> Gulshan Plot 07
         </Link>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Engineering Assessment</h1>
+            <h1 className="text-2xl font-bold">{step.title}</h1>
             <p className="text-muted-foreground">Gulshan Plot 07</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
-                <User className="h-3.5 w-3.5" /> Eng. Rafi
+                <User className="h-3.5 w-3.5" /> {step.assignee}
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
-                <Shield className="h-3.5 w-3.5" /> Chief Engineer
+                <Shield className="h-3.5 w-3.5" /> {step.reviewer}
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
-                <Clock className="h-3.5 w-3.5" /> Due 22 Aug
+                <Clock className="h-3.5 w-3.5" /> Due {step.due}
               </div>
             </div>
-            <Badge className="bg-blue-100 text-blue-800">In Progress</Badge>
+            <Badge className={statusBadge}>{step.status}</Badge>
           </div>
         </div>
         <div className="flex items-center gap-3 mt-3">

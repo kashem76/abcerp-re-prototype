@@ -132,11 +132,109 @@
 
 ---
 
-## Screen Flow — How a User Walks Through the System
+## Land Evaluation Module — Rewrite Tracker
 
-### Flow 1: Land Lead → Project
+The Land module is being rewritten to follow the natural workflow defined in `_docs/05-land-evaluation-complete-design.md`. The old standalone screens (Opportunity, Feasibility wizard, Land Agreement) are being replaced by a unified workspace per land record.
+
+### Settings Layer (7 pages — ALL DONE)
+
+| # | Route | Status | What It Shows |
+|---|---|---|---|
+| S1 | `settings/land-evaluation` | DONE | 8 configuration cards |
+| S2 | `settings/land-evaluation/selection` | DONE | Selection templates + criteria |
+| S3 | `settings/land-evaluation/frameworks` | DONE | Framework list |
+| S4 | `settings/land-evaluation/frameworks/[id]` | DONE | Framework builder (6 tabs) |
+| S5 | `settings/land-evaluation/criteria` | DONE | Criteria library |
+| S6 | `settings/land-evaluation/cost` | DONE | Cost estimation categories |
+| S7 | `settings/land-evaluation/report` | DONE | Report templates + builder |
+
+### Operational Layer (8 pages — 3 DONE, 5 need rewrite)
+
+| # | Route | Status | What It Shows | Rewrite Scope |
+|---|---|---|---|---|
+| O1 | `land-leads` | DONE | Pipeline — table-like rows, dropdown filters, sort | Rewritten Aug 25 |
+| O2 | `land-leads/new` | DONE | Add Land — minimal form + post-save guidance | Updated Aug 25 — success screen with recommended next step + alternatives |
+| O3 | `land-leads/[id]` | DONE | Workspace Overview | Rewritten Aug 25 — Initial Selection (NEW), stage stepper, dept progress, guided next-step |
+| O4 | `land-leads/[id]/work` | DONE | Work Board | Rewritten Aug 25 — Assignment Review + Board/List/Dept views + dependency indicators |
+| O5 | `land-leads/[id]/work/[stepId]` | DONE | Step Assessment + Sign-off | 5 tabs, expandable criteria, findings, dept review. Strongest page |
+| O5b | `land-leads/[id]/work/site-assessment` | DONE | Unified Site Assessment | All-in-one view. Keep as Simple mode alternative |
+| O6 | `land-leads/[id]/feasibility` | DONE | Evaluation Overview | Rewritten Aug 25 — All 8 depts, findings by severity, risks with status, cost benchmark, drill-in |
+| O7 | `land-leads/[id]/feasibility/financial` | DONE | Financial Model | Rewritten Aug 25 — Source attribution per line, staleness badges, scenario comparison, per-unit metrics |
+| O8 | `land-leads/[id]/decision` | DONE | Decision | Rewritten Aug 25 — Readiness gate, report, 4 decision options, 3 post-decision states |
+
+### Build Order (follows user journey)
 
 ```
+Phase A — Work Board rewrite (O4)          ← foundation everything flows through
+Phase B — Workspace Overview rewrite (O3)  ← first screen users see, must guide
+Phase C — Decision rewrite (O8)            ← where management acts
+Phase D — Evaluation Overview rewrite (O6) ← where conclusions surface
+Phase E — Financial Model rewrite (O7)     ← CFO's traceability screen
+Phase F — Add Land post-save guidance (O2) ← minor polish
+```
+
+### Screens Replaced by Land Workspace
+
+These old standalone screens are superseded by the unified Land workspace. They remain in the prototype for reference but are no longer the canonical flow:
+
+| Old Screen | Replaced By |
+|---|---|
+| `/real-estate/opportunity` | Workspace Overview (costs tab) |
+| `/real-estate/opportunity/new` | [+ Add Land] → workspace auto-created |
+| `/real-estate/opportunity/convert` | [Create Project] from Acquisition tab |
+| `/real-estate/feasibility` | Evaluation Overview tab |
+| `/real-estate/feasibility/new` | [Start Evaluation] from workspace |
+| `/real-estate/land-agreement/new` | Acquisition tab (Purchase/JV path) |
+| `/real-estate/land-agreement/jv` | JV Entitlement Builder (inside Acquisition) |
+
+---
+
+## Screen Flow — How a User Walks Through the System
+
+### Flow 1: Land Lead → Evaluation → Decision → Project (New Workflow)
+
+```
+Land Pipeline (/land-leads)
+  → "+ Add Land" button
+    → Add Land (/land-leads/new)
+      → Saves → Workspace Overview (/land-leads/[id])
+        → "What's next?" guidance
+  
+  → Open a lead
+    → Workspace Overview (/land-leads/[id])
+      → Initial Selection (for NEW lands)
+        → Qualify → [Start Evaluation]
+          → Assignment Review (one-time)
+            → [Start Work]
+      
+      → Work Board (/land-leads/[id]/work)
+        → Board / List / By Department / My Work views
+        → Click step card
+          → Step Assessment (/land-leads/[id]/work/[stepId])
+            → 5 tabs: Assessment, Findings, Files, Discussion, History
+            → All criteria complete → Department Sign-off
+            → Card moves to "Complete" column
+      
+      → All depts signed off → Evaluation Overview (/land-leads/[id]/feasibility)
+        → Scores, findings, risks, dept drill-in
+        → Financial Model (/land-leads/[id]/feasibility/financial)
+          → Revenue, costs, scenarios, source attribution
+      
+      → Decision (/land-leads/[id]/decision)
+        → Readiness Check → Management Report → [Submit to Management]
+        → CEO: Approve / Conditions / Return / Reject
+        
+        → If Approved → Acquisition tab unlocks
+          → Purchase/JV → Milestones → Payments
+          → All complete → [Create Project]
+            → Project Workspace (/projects/[id])
+```
+
+### Flow 1 (Legacy): Land Lead → Opportunity → Feasibility → Project
+
+```
+(Superseded by new workflow above — kept for reference)
+
 Land Leads (/land-leads)
   → "+ Add Lead" button
     → Add Land Lead (/land-leads/new)

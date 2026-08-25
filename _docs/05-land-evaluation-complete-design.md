@@ -858,9 +858,44 @@ Settings home page — add card:
 Route mappings — existing land-leads mapping already resolves to land-bd module
 ```
 
-### 10.4 Estimated Scope
+### 10.4 Build Status (as of 25 Aug 2026)
 
-- 15 page files
+| # | Page | Status | Notes |
+|---|---|---|---|
+| **Settings** |
+| 1 | Settings Home | DONE | 8 cards linking to sub-sections |
+| 2 | Selection Templates | DONE | Template list + criteria editing |
+| 3 | Framework List | DONE | Card per framework |
+| 4 | Framework Builder | DONE | 6 tabs (Structure, Team, Workflow, Scoring, Report, Preview) |
+| 5 | Criteria Library | DONE | Searchable table with edit dialog |
+| 6 | Cost Categories | DONE | 17 drag-orderable categories |
+| 7 | Report Templates | DONE | Template list + builder |
+| **Operational** |
+| 8 | Pipeline | DONE | Rewritten — table-like rows with dropdown filters, sort, search |
+| 9 | Add Land | DONE | Minimal form |
+| 10 | Workspace Overview | NEEDS REWRITE | Currently shows overview but missing Initial Selection for NEW lands, missing stage progress bars, missing guided next-step |
+| 11 | Work Board | NEEDS REWRITE | Currently mixes Work/Evaluation/Decision cards into one grid. Must split into pure task board with Assignment Review mode + Kanban views |
+| 12 | Step Assessment | DONE | 5 tabs (Assessment, Findings, Files, Discussion, History) + Department Sign-off. Strongest page |
+| 12b | Site Assessment (unified) | DONE | All-in-one view grouping Legal/Technical/Market/Regulatory. Not in final spec but useful for small orgs — keep as Simple mode alternative |
+| 13 | Evaluation Overview | PARTIAL | Exists from earlier build but needs alignment with doc spec (scores, findings by severity, dept drill-in) |
+| 14 | Financial Model | PARTIAL | Exists from earlier build but missing source attribution and scenario comparison |
+| 15 | Decision | PARTIAL | Exists but missing readiness check gate and structured condition builder |
+
+### 10.5 Operational Rewrite Priority
+
+The following pages need rewriting to align with the natural workflow. Order follows how a user actually walks through the system:
+
+| Priority | Page | What Changes | Why |
+|---|---|---|---|
+| **P1** | Work Board (#11) | Remove evaluation/financial/decision cards. Add Assignment Review mode. Add Board/List/Department/My Work views. Add dependency indicators. | This is the daily workspace — everything flows through here |
+| **P2** | Workspace Overview (#10) | Add Initial Selection (qualify/hold/reject) for NEW lands. Add stage progress stepper. Add guided next-step with CTA. Add upcoming deadlines. | First screen users see when opening a land — must answer "what's happening, what's next" |
+| **P3** | Decision (#15) | Add readiness check (all depts signed off?). Auto-assemble report from sign-offs. Add structured condition builder for conditional approvals. Add 4 decision options with post-decision states. | Where management acts — must be airtight |
+| **P4** | Evaluation Overview (#13) | Align with spec: dept scores table, findings by severity, risks auto-aggregated, cost vs benchmark. Add dept drill-in view. | Where conclusions surface — coordinators and dept heads live here |
+| **P5** | Financial Model (#14) | Add source attribution per assumption. Add staleness warnings. Add scenario comparison table (Conservative/Base/Optimistic). | CFO's primary screen — every number must be traceable |
+
+### 10.6 Estimated Scope
+
+- 15 page files (7 settings DONE, 8 operational — 3 DONE, 5 need rewrite)
 - ~5,000-6,500 lines total (all mock data inline per project convention)
 - 1 navigation file update
 - 1 settings home page update
@@ -869,9 +904,134 @@ Route mappings — existing land-leads mapping already resolves to land-bd modul
 
 ---
 
-## 11. Post-Decision Lifecycle
+## 11. Natural Workflow — What the Prototype Must Demonstrate
 
-### 11.1 After Approval
+The prototype must make a user feel: "this is exactly how we work, but organized." Every screen transition should feel like the next natural thing a person would do — never "where do I go now?"
+
+### 11.1 The Complete User Journey (Happy Path)
+
+```
+DAY 1 — LEAD CAPTURE
+─────────────────────────────────────────────────────────────
+BD Officer gets a call from a broker about a plot in Gulshan.
+
+1. Opens Land Pipeline → clicks [+ Add Land]
+2. Fills minimal form (name, location, area, owner, source)
+3. Saves → lands on Workspace Overview
+   System shows: "Land created. What's next?"
+   → [Schedule Site Visit]  [Start Selection]  [Add Documents]
+
+DAY 2 — INITIAL SCREENING
+─────────────────────────────────────────────────────────────
+BD Head reviews the new lead.
+
+4. Opens Workspace Overview → sees Initial Selection checklist
+   - Is the area developable? ✓
+   - Is the price within range? ✓
+   - Is the owner contactable? ✓
+   - Any immediate red flags? No
+5. Clicks [Qualify → Start Evaluation]
+6. System generates 7 work steps from "Standard Land Evaluation" framework
+7. Assignment Review screen appears:
+   - Engineering → Eng. Rafi (auto-resolved from role)
+   - Legal → Adv. Rahman (auto-resolved)
+   - Marketing → Nadia (auto-resolved)
+   - etc.
+   Coordinator confirms or overrides → clicks [Start Work]
+8. Stage advances: NEW → ASSESSMENT
+
+DAY 3-14 — DEPARTMENT WORK
+─────────────────────────────────────────────────────────────
+Each department works their assigned step.
+
+9. Eng. Rafi opens My Work → sees "Engineering Assessment"
+   - 11 criteria to evaluate
+   - Fills in each: rating + assessment + evidence + risk + recommendation
+   - Creates formal Findings from observations
+   - Uploads bore-log, soil test, photos
+10. When all 11 criteria complete → Department Sign-off appears
+    - Chief Engineer reviews → comments → signs off
+    - Engineering Assessment: LOCKED ✓
+
+Meanwhile, Legal, Marketing, Sales, Regulatory all do the same.
+Coordinator watches the Work Board — sees cards move across columns.
+
+11. Financial Feasibility step auto-unblocks when Engineering
+    provides construction cost and Marketing provides selling price.
+    Finance assembles the model.
+
+DAY 15 — EVALUATION REVIEW
+─────────────────────────────────────────────────────────────
+Coordinator reviews consolidated results.
+
+12. Opens Evaluation Overview:
+    - Overall score: 81/100 — Recommended
+    - 6/7 departments signed off
+    - 3 findings (1 Medium, 2 Low)
+    - 2 risks
+    - Cost: ৳716M construction (3% above benchmark)
+13. Financial Model shows:
+    - Revenue ৳1.82B, Cost ৳1.39B, Profit ৳430M, IRR 22.4%
+    - Each assumption shows source: "Marketing: Nadia, 18 Aug"
+
+DAY 16 — MANAGEMENT DECISION
+─────────────────────────────────────────────────────────────
+CEO/MD reviews and decides.
+
+14. Opens Decision page:
+    - Readiness Check: ✓ All departments signed off
+    - Auto-assembled Management Report (10 sections)
+    - Clicks [Submit to Management]
+15. CEO sees concise decision screen:
+    - Financial summary, department recommendations, key risks
+    - 4 options: Approve / Approve with Conditions / Return / Reject
+16. CEO approves with condition: "Mutation must complete before registration"
+    - Stage advances: DECISION → ACQUISITION
+
+DAY 17+ — ACQUISITION
+─────────────────────────────────────────────────────────────
+Land team executes the purchase/JV.
+
+17. Acquisition tab unlocks
+    - Purchase or JV path selected
+    - Agreement terms, milestones, payment requisitions
+18. All milestones complete → [Create Project]
+    - Carries forward: feasibility, costs, documents, risks, conditions
+    - Stage: ACQUISITION → CONVERTED
+    - Project Workspace opens
+```
+
+### 11.2 Screen Transitions That Must Feel Natural
+
+Every transition below answers: "I just did X, what's next?"
+
+| After... | System shows... | Primary CTA |
+|---|---|---|
+| Add Land | Workspace Overview with "What's next?" guidance | [Start Selection] or [Schedule Site Visit] |
+| Complete Selection | "Land qualified. 7 work steps ready." | [Review Assignments] |
+| Confirm Assignments | Work Board with all cards in "Not Started" | Click any card to start |
+| Complete a criterion | "X completed. Y/Z remaining." | [Next criterion →] |
+| Complete all criteria | Department Sign-off section appears | [Submit for Review] |
+| Dept Head signs off | Card moves to "Complete" column. Next blocking step highlighted. | [Open next step] |
+| All departments signed off | Decision readiness shows "Ready for submission" | [Submit to Management] |
+| CEO approves | "Land approved. Acquisition unlocked." | [Start Acquisition] |
+| All acquisition milestones | "Ready for project conversion." | [Create Project] |
+| Project created | "Project created. Land workspace is now read-only." | [Open Project Workspace] |
+
+### 11.3 What Should Never Happen
+
+- User adds a land and sees a blank page with no guidance
+- User completes all assessments but doesn't know how to trigger the decision
+- CEO sees a 50-page report instead of a 1-page decision screen
+- Stage changes without a business event (no dropdown status changes)
+- Data entered in one screen must be re-entered in another
+- User clicks "back" and loses context of where they were
+
+---
+
+## 12. Post-Decision Lifecycle
+
+### 12.1 After Approval
 
 1. Acquisition tab unlocks with method selector: Purchase / JV / Lease / Development Rights (configurable)
 2. Agreement details, milestones, obligations tracked
@@ -879,7 +1039,7 @@ Route mappings — existing land-leads mapping already resolves to land-bd modul
 4. Payment requisitions created (demand → Finance workflow → GL posting)
 5. Land stage → ACQUISITION
 
-### 11.2 After Rejection
+### 12.2 After Rejection
 
 1. Decision rationale preserved with full audit trail
 2. Land stage → CLOSED (Rejected)
@@ -887,7 +1047,7 @@ Route mappings — existing land-leads mapping already resolves to land-bd modul
 4. Can be reopened with admin authorization + audit trail
 5. Rejection data feeds: Rejection Reason Analysis (Report #105), Rejected Opportunities (Report #104)
 
-### 11.3 Project Conversion
+### 12.3 Project Conversion
 
 1. One-click conversion from Acquisition tab when milestones complete
 2. Minimal form: Project Name, Code, Start Date, Target Completion
@@ -905,7 +1065,7 @@ Route mappings — existing land-leads mapping already resolves to land-bd modul
 5. Land stage → CONVERTED with project reference link
 6. Project workspace back-links to land record
 
-### 11.4 Approval Conditions Tracking
+### 12.4 Approval Conditions Tracking
 
 Structured conditions survive across stages:
 

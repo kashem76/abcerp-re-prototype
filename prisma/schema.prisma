@@ -1,0 +1,155 @@
+// ═══════════════════════════════════════════════════════════════
+// Evaluation Engine — SQLite Schema
+// ═══════════════════════════════════════════════════════════════
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ─── Configuration Layer ──────────────────────────────────────
+
+/// Evaluation categories (sections) — e.g., Engineering, Legal, Regulatory
+/// Admins can add/remove/rename categories. Each category maps to a department.
+model EvaluationCategory {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  department  String
+  sortOrder   Int     @default(0)
+  active      Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  criteria          Criterion[]
+  frameworkSections FrameworkSection[]
+
+  @@map("evaluation_categories")
+}
+
+/// Reusable criteria library — shared across all frameworks.
+/// Each criterion belongs to a category and defines how it should be evaluated.
+model Criterion {
+  id                 String  @id @default(uuid())
+  categoryId         String
+  category           EvaluationCategory @relation(fields: [categoryId], references: [id])
+
+  name               String
+  description        String?
+  guidance           String?  // Evaluator guidance text
+  responseType       String   // Rating, Pass/Fail, Choice, Numeric, Amount, Percentage
+  weight             Int      @default(0)
+  critical           Boolean  @default(false)
+  active             Boolean  @default(true)
+  minimumAcceptable  Float?
+  scaleLabels        String?  // JSON array: ["Very Poor", "Poor", "Acceptable", "Good", "Excellent"]
+  requiredOutputs    String?  // JSON array: ["Assessment", "Findings", "Evidence", "Risk", "Recommendation"]
+  reportInclusion    String?  // JSON array: ["Include score", "Include findings", "Include recommendation"]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  frameworkCriteria FrameworkCriterion[]
+
+  @@map("criteria")
+}
+
+/// Evaluation frameworks — e.g., "Standard Land Evaluation", "JV Evaluation"
+model EvaluationFramework {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  isDefault   Boolean @default(false)
+  active      Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sections FrameworkSection[]
+
+  @@map("evaluation_frameworks")
+}
+
+/// Framework sections — ties a framework to categories with ordering and weights.
+/// Each section defines the team defaults for that evaluation step.
+model FrameworkSection {
+  id                  String @id @default(uuid())
+  frameworkId          String
+  framework            EvaluationFramework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  categoryId           String
+  category             EvaluationCategory  @relation(fields: [categoryId], references: [id])
+
+  sortOrder            Int    @default(0)
+  weight               Float  @default(0)  // Section weight % (must sum to 100 across framework)
+  defaultDepartment    String?
+  defaultRole          String?
+  defaultReviewer      String?
+  defaultDeadlineDays  Int    @default(7)
+
+  // Workflow dependencies (stored as JSON array of section IDs)
+  dependsOn            String?  // JSON array: ["section-id-1", "section-id-2"]
+
+  criteria FrameworkCriterion[]
+
+  @@map("framework_sections")
+}
+
+/// Framework criteria — ties a framework section to specific criteria with ordering.
+model FrameworkCriterion {
+  id                  String @id @default(uuid())
+  frameworkSectionId  String
+  frameworkSection    FrameworkSection @relation(fields: [frameworkSectionId], references: [id], onDelete: Cascade)
+  criterionId         String
+  criterion           Criterion @relation(fields: [criterionId], references: [id])
+
+  sortOrder           Int    @default(0)
+  overrideWeight      Float? // If set, overrides criterion's default weight in this framework
+
+  @@unique([frameworkSectionId, criterionId])
+  @@map("framework_criteria")
+}
+
+/// Selection templates — quick screening criteria with pass/fail rules.
+model SelectionTemplate {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  active      Boolean @default(true)
+  isDefault   Boolean @default(false)
+  resultOptions String? // JSON array: ["Qualify", "Hold", "Reject"]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  criteria SelectionCriterion[]
+
+  @@map("selection_templates")
+}
+
+/// Selection criteria — per-template screening criteria with threshold rules.
+model SelectionCriterion {
+  id             String @id @default(uuid())
+  templateId     String
+  template       SelectionTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  name           String
+  category       String
+  responseType   String
+  unit           String?
+  preferred      String?  // e.g., ">= 20"
+  acceptable     String?  // e.g., ">= 10"
+  belowStandard  String?  // e.g., "< 10"
+  weight         Int      @default(0)
+  critical       Boolean  @default(false)
+  failAction     String   @default("flag") // "reject" | "flag" | "management"
+  department     String
+  role           String
+  sortOrder      Int      @default(0)
+
+  @@map("selection_criteria")
+}

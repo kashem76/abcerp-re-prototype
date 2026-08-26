@@ -4,7 +4,7 @@ import {
   Package, Hammer, Home, UserCircle, Settings, Database,
   DollarSign, HardHat, ShoppingCart, Users, Landmark,
   FileBarChart, Search, Bell, ChevronDown, Shield, Map,
-  Clipboard, GitBranch, Hash, ShieldCheck, Layers,
+  Clipboard, GitBranch, Hash, ShieldCheck, Layers, Filter,
   Handshake, FileSpreadsheet, Truck, Receipt, PenLine,
   type LucideIcon,
 } from "lucide-react";
@@ -191,7 +191,10 @@ export const moduleNav: Record<ModuleId, NavSection[]> = {
     {
       title: "Land Config",
       items: [
-        { href: "/real-estate/settings/land-evaluation",    label: "Land Evaluation",      icon: Map },
+        { href: "/real-estate/settings/land-evaluation",              label: "Land Evaluation",      icon: Map },
+        { href: "/real-estate/settings/land-evaluation/criteria",     label: "Evaluation Criteria",  icon: ClipboardList },
+        { href: "/real-estate/settings/land-evaluation/frameworks",   label: "Frameworks",           icon: Layers },
+        { href: "/real-estate/settings/land-evaluation/selection",    label: "Selection Templates",  icon: Filter },
       ],
     },
   ],
